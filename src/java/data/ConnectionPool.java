@@ -16,7 +16,7 @@ public class ConnectionPool {
     private ConnectionPool() throws NamingException {
 
         InitialContext ic = new InitialContext();
-        dataSource = (DataSource) ic.lookup("java:/comp/env/jdbc/JavaExpenseTracker");
+        dataSource = (DataSource) ic.lookup("java:/comp/env/jdbc/flashcard");
 
     }
     public static synchronized ConnectionPool getInstance() throws NamingException {

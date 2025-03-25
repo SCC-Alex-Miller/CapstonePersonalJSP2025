@@ -23,7 +23,7 @@
             <div class="row justify-content-center">
                 <div class="row justify-content-center">
                     <div class="col-6">
-                        <h1>Expense Trackers</h1>
+                        <h1>Flashcard App</h1>
                         <h3>${message}</h3>
                         <form action="Public" method="post">
                             <input type="hidden" name="action" value="login">

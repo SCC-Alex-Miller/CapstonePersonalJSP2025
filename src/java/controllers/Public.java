@@ -4,7 +4,7 @@
  */
 package controllers;
 
-import business.Users;
+import business.User;
 import data.UserDA;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -56,7 +56,7 @@ public class Public extends HttpServlet {
                 String email = request.getParameter("email");
                 String password = request.getParameter("password");
 
-                Users storedCreds = new Users();
+                User storedCreds = new User();
 
                 try {
                     storedCreds = UserDA.getPasswordFromEmail(email);
@@ -81,9 +81,9 @@ public class Public extends HttpServlet {
                     if (storedCreds == null || !ch.matches(password, storedCreds.getPassword())) {
                         request.setAttribute("message", "invalid credentials");
                     } else {
-                        Users loggedInUser = storedCreds;
+                        User loggedInUser = storedCreds;
                         session.setAttribute("loggedInUser", loggedInUser);
-                        url = "/account.jsp";
+                        url = "/congratulations.jsp";
                     }
                 } catch (Exception ex) {
                     LOG.log(Level.SEVERE, null, ex);
@@ -93,26 +93,21 @@ public class Public extends HttpServlet {
             }
             case "registration": {
                 String message = "";
-                String firstName = request.getParameter("firstName");
-                String lastName = request.getParameter("lastName");
+                String username = request.getParameter("username");
                 String email = request.getParameter("email");
                 String password = request.getParameter("password");
+                String role = "user";
+                boolean activeStatus = true;
+                String adminMessage = "";
                 LocalDate createdDate = LocalDate.now();
 
-                Users user = new Users();
+                User user = new User();
                 
-                user.setFirstName(firstName);
+                user.setUsername(username);
                 
-                if (user.getFirstName() == null || user.getFirstName().equals("")) {
-                    message = "Must enter a first name.";
-                    errors.put("firstName", "First name empty");
-                }
-                
-                user.setLastName(lastName);
-                
-                if (user.getLastName() == null || user.getLastName().equals("")) {
-                    message = "Must enter a last name.";
-                    errors.put("lastName", "Last name empty");
+                if (user.getUsername() == null || user.getUsername().equals("")) {
+                    message = "Must enter a username.";
+                    errors.put("username", "username empty");
                 }
                 
                 user.setEmail(email);
@@ -139,8 +134,6 @@ public class Public extends HttpServlet {
                     message = "Must enter a password.";
                     errors.put("email", "Password empty");
                 }
-                
-                user.setCreatedDate(createdDate);
 
                 
                 SecretKeyCredentialHandler ch;
@@ -159,6 +152,10 @@ public class Public extends HttpServlet {
 
                 if (errors.isEmpty()) {
                     user.setPassword(hash);
+                    user.setRole(role);
+                    user.setActiveStatus(activeStatus);
+                    user.setAdminMessage(adminMessage);
+                    user.setCreatedDate(createdDate);
                     try {
                         UserDA.insertUser(user);
                     } catch (NamingException ex) {

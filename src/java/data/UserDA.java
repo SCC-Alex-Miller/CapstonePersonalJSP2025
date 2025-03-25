@@ -4,10 +4,10 @@
  */
 package data;
 
-import business.Users;
+import business.User;
 import javax.naming.NamingException;
 import java.sql.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.LinkedHashMap;
 
 
@@ -16,21 +16,23 @@ import java.util.LinkedHashMap;
  * @author kkmil
  */
 public class UserDA {
-    public static int insertUser(Users user) throws NamingException, SQLException {
+    public static int insertUser(User user) throws NamingException, SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
 
         String query
-                = "INSERT INTO users (firstName, lastName, email, password, createdDate) "
-                + "VALUES (?, ?, ?, ?, ?)";
+                = "INSERT INTO user (username, email, password, role, activeStatus, adminMessage, createdDate) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         ps = connection.prepareStatement(query);
-        ps.setString(1, user.getFirstName());
-        ps.setString(2, user.getLastName());
-        ps.setString(3, user.getEmail());
-        ps.setString(4, user.getPassword());
-        ps.setDate(5, Date.valueOf(user.getCreatedDate()));
+        ps.setString(1, user.getUsername());
+        ps.setString(2, user.getEmail());
+        ps.setString(3, user.getPassword());
+        ps.setString(4, user.getRole());
+        ps.setBoolean(5, user.isActiveStatus());
+        ps.setString(6, user.getAdminMessage());
+        ps.setDate(7, Date.valueOf(user.getCreatedDate()));
 
         int rows = ps.executeUpdate();
         ps.close();
@@ -39,23 +41,21 @@ public class UserDA {
 
     }
 
-    public static int updateUser(Users user) throws NamingException, SQLException {
+    public static int updateUser(User user) throws NamingException, SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
 
         String query
-                = "UPDATE users "
-                + "SET firstName = ?, lastName = ?, email = ?, password = ?, createdDate = ?"
+                = "UPDATE user "
+                + "SET username = ?, email = ?, password = ?"
                 + "WHERE userID = ?";
 
         ps = connection.prepareStatement(query);
-        ps.setString(1, user.getEmail());
+        ps.setString(1, user.getUsername());
         ps.setString(2, user.getEmail());
-        ps.setString(3, user.getEmail());
-        ps.setString(4, user.getPassword());
-        ps.setDate(5, Date.valueOf(user.getCreatedDate()));
-        ps.setInt(6, user.getUserID());
+        ps.setString(3, user.getPassword());
+        ps.setInt(4, user.getUserID());
 
         int rows = ps.executeUpdate();
         ps.close();
@@ -65,25 +65,27 @@ public class UserDA {
     }
 
     
-    public static LinkedHashMap<Integer, Users> selectUsers() throws NamingException, SQLException {
+    public static LinkedHashMap<Integer, User> selectUsers() throws NamingException, SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        String query = "SELECT * FROM users";
+        String query = "SELECT * FROM user";
 
         ps = connection.prepareStatement(query);
         rs = ps.executeQuery();
 
-        LinkedHashMap<Integer, Users> users = new LinkedHashMap();
+        LinkedHashMap<Integer, User> users = new LinkedHashMap();
         while (rs.next()) {
-            Users user = new Users();
+            User user = new User();
             user.setUserID(rs.getInt("userID"));
-            user.setFirstName(rs.getString("firstName"));
-            user.setLastName(rs.getString("lastName"));
-            user.setPassword(rs.getString("password"));
+            user.setUsername(rs.getString("username"));
             user.setEmail(rs.getString("email"));
+            user.setPassword(rs.getString("password"));
+            user.setRole(rs.getString("role"));
+            user.setActiveStatus(rs.getBoolean("activeStatus"));
+            user.setAdminMessage(rs.getString("adminMessage"));
             user.setCreatedDate(rs.getDate("createdDate").toLocalDate());
             users.put(user.getUserID(), user);
         }
@@ -96,28 +98,30 @@ public class UserDA {
 
     }
 
-    public static Users getUserFromUserID(int userID) throws NamingException, SQLException {
+    public static User getUserFromUserID(int userID) throws NamingException, SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
 
         String query
-                = "SELECT * FROM users "
+                = "SELECT * FROM user "
                 + "WHERE userID = ? ";
 
         ps = connection.prepareStatement(query);
         ps.setInt(1, userID);
         rs = ps.executeQuery();
         
-        Users user = null;
+        User user = null;
         if (rs.next()) {
-            user = new Users();
+            user = new User();
             user.setUserID(rs.getInt("userID"));
-            user.setFirstName(rs.getString("firstName"));
-            user.setLastName(rs.getString("lastName"));
-            user.setPassword(rs.getString("password"));
+            user.setUsername(rs.getString("username"));
             user.setEmail(rs.getString("email"));
+            user.setPassword(rs.getString("password"));
+            user.setRole(rs.getString("role"));
+            user.setActiveStatus(rs.getBoolean("activeStatus"));
+            user.setAdminMessage(rs.getString("adminMessage"));
             user.setCreatedDate(rs.getDate("createdDate").toLocalDate());
             return user;
         }
@@ -128,28 +132,30 @@ public class UserDA {
         return user;
     }
 
-    public static Users getPasswordFromEmail(String email) throws NamingException, SQLException {
+    public static User getPasswordFromEmail(String email) throws NamingException, SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
 
         String query
-                = "SELECT * FROM users "
+                = "SELECT * FROM user "
                 + "WHERE email = ? ";
 
         ps = connection.prepareStatement(query);
         ps.setString(1, email);
         rs = ps.executeQuery();
 
-        Users user = null;
+        User user = null;
         if (rs.next()) {
-            user = new Users();
-            user.setUserID(rs.getInt("userId"));
-            user.setFirstName(rs.getString("firstName"));
-            user.setLastName(rs.getString("lastName"));
+            user = new User();
+            user.setUserID(rs.getInt("userID"));
+            user.setUsername(rs.getString("username"));
             user.setEmail(rs.getString("email"));
             user.setPassword(rs.getString("password"));
+            user.setRole(rs.getString("role"));
+            user.setActiveStatus(rs.getBoolean("activeStatus"));
+            user.setAdminMessage(rs.getString("adminMessage"));
             user.setCreatedDate(rs.getDate("createdDate").toLocalDate());
             return user;
         }
@@ -167,7 +173,7 @@ public class UserDA {
         ResultSet rs = null;
 
         String query
-                = "SELECT * FROM users "
+                = "SELECT * FROM user "
                 + "WHERE email = ? ";
 
         ps = connection.prepareStatement(query);
