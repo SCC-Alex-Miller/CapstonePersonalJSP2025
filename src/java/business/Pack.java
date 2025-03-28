@@ -19,19 +19,19 @@ public class Pack implements Serializable {
     private int packHighScore;
     private String packHighScoreTime;
     private LocalDate createdDate;
-    private int fkUserID;
+    private User user;
 
     public Pack() {
     }
 
-    public Pack(int packID, String packName, String packCategoryName, int packHighScore, String packHighScoreTime, LocalDate createdDate, int fkUserID) {
+    public Pack(int packID, String packName, String packCategoryName, int packHighScore, String packHighScoreTime, LocalDate createdDate, User user) {
         this.packID = packID;
         this.packName = packName;
         this.packCategoryName = packCategoryName;
         this.packHighScore = packHighScore;
         this.packHighScoreTime = packHighScoreTime;
         this.createdDate = createdDate;
-        this.fkUserID = fkUserID;
+        this.user = user;
     }
 
     public int getPackID() {
@@ -82,12 +82,12 @@ public class Pack implements Serializable {
         this.createdDate = createdDate;
     }
 
-    public int getFkUserID() {
-        return fkUserID;
+    public User getUser() {
+        return user;
     }
 
-    public void setFkUserID(int fkUserID) {
-        this.fkUserID = fkUserID;
+    public void setUser(User user) {
+        this.user = user;
     }
     
     

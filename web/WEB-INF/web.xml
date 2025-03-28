@@ -18,7 +18,7 @@
     </servlet>
     <servlet>
         <servlet-name>CategoryController</servlet-name>
-        <servlet-class>controllers.CategoryController</servlet-class>
+        <servlet-class>controllers.PackCategoryController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Controller</servlet-name>

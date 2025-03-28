@@ -11,7 +11,7 @@
             <ul class="navbar-nav">
                 <c:if test="${loggedInUser != null}">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="Public?action=goToIndexPage">Welcome ${loggedInUser.firstName}</a>
+                        <a class="nav-link active" aria-current="page" href="Public?action=goToIndexPage">Welcome ${loggedInUser.username}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="Account?action=accountPage">Accounts</a>

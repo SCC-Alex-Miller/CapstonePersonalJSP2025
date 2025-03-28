@@ -83,7 +83,7 @@ public class Public extends HttpServlet {
                     } else {
                         User loggedInUser = storedCreds;
                         session.setAttribute("loggedInUser", loggedInUser);
-                        url = "/congratulations.jsp";
+                        url = "/userPack.jsp";
                     }
                 } catch (Exception ex) {
                     LOG.log(Level.SEVERE, null, ex);
