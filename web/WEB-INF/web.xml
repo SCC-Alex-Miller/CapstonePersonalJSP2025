@@ -5,8 +5,8 @@
         <servlet-class>controllers.Controller</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>AccountController</servlet-name>
-        <servlet-class>controllers.AccountController</servlet-class>
+        <servlet-name>PackController</servlet-name>
+        <servlet-class>controllers.PackController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Public</servlet-name>
@@ -17,7 +17,7 @@
         <servlet-class>controllers.ExpenseController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>CategoryController</servlet-name>
+        <servlet-name>PackCategoryController</servlet-name>
         <servlet-class>controllers.PackCategoryController</servlet-class>
     </servlet>
     <servlet-mapping>
@@ -25,8 +25,8 @@
         <url-pattern>/Controller</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>AccountController</servlet-name>
-        <url-pattern>/Account</url-pattern>
+        <servlet-name>PackController</servlet-name>
+        <url-pattern>/Pack</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Public</servlet-name>
@@ -37,8 +37,8 @@
         <url-pattern>/Expense</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>CategoryController</servlet-name>
-        <url-pattern>/Category</url-pattern>
+        <servlet-name>PackCategoryController</servlet-name>
+        <url-pattern>/PackCategory</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

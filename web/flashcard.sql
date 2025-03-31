@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 25, 2025 at 04:29 AM
+-- Generation Time: Mar 29, 2025 at 06:00 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -61,7 +61,7 @@ CREATE TABLE `pack` (
 CREATE TABLE `packcategory` (
   `packCategoryID` int(11) NOT NULL,
   `packCategoryName` varchar(256) NOT NULL,
-  `packCategoryCreateDate` datetime NOT NULL,
+  `packCategoryCreatedDate` datetime NOT NULL,
   `fkUserID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -98,6 +98,13 @@ CREATE TABLE `user` (
   `adminMessage` varchar(256) DEFAULT NULL,
   `createdDate` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`userID`, `username`, `email`, `password`, `role`, `activeStatus`, `adminMessage`, `createdDate`) VALUES
+(1, 'lhsamiller', 'lhsamiller@gmail.com', '11b51d3dfca351b2c722f92a502c3b74$4096$312e2c631fa216506f71cacec8113404b7ace9d26df37a4a9acf2084ab530c06', 'user', 1, '', '2025-03-24 00:00:00');
 
 --
 -- Indexes for dumped tables
@@ -171,7 +178,7 @@ ALTER TABLE `report`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables

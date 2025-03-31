@@ -4,6 +4,8 @@
     Author     : lando
 --%>
 
+<%@page import="data.PackCategoryDA"%>
+<%@page import="business.PackCategory"%>
 <%@page import="javax.naming.NamingException"%>
 <%@page import="java.sql.SQLException"%>
 <%@page import="java.util.logging.Level"%>
@@ -28,8 +30,11 @@
     String error = "";
 
     try {
-        LinkedHashMap<Integer, Pack> allUserPacks = PackDA.seeAllUserPacks(pack);
+        LinkedHashMap<Integer, Pack> allUserPacks = PackDA.seeAllUserPacks(loggedInUser.getUserID());
         request.setAttribute("allUserPacks", allUserPacks);
+
+        LinkedHashMap<Integer, PackCategory> packCategoryList = PackCategoryDA.selectAllPackCategoriesByUserID(loggedInUser.getUserID());
+        request.setAttribute("packCategoryList", packCategoryList);
 
     } catch (NamingException | SQLException e) {
         error = "Issue populating Accounts for User.";
@@ -61,6 +66,12 @@
                             <div class="columnFlex">
                                 <label for="newPack">Pack Name</label>
                                 <input type="text" name="newPack" required><br>
+                                <select name="packCategory">
+                                    <option value="" disabled selected>Select your option</option>
+                                    <c:forEach items="${packCategoryList}" var="packCategory" >
+                                        <option value="${packCategory.value.packCategoryID}" >${packCategory.value.packCategoryName}</option>
+                                    </c:forEach>
+                                </select>
                             </div>
                             <input type="submit" value="Submit" id="submit">
                         </form>
@@ -131,7 +142,7 @@
                                 <th>Category</th>
                                 <th>Delete Category</th>
                             </tr>
-                            <c:forEach var="packCategory" items="${packCategories}" varStatus="status">
+                            <c:forEach var="packCategory" items="${packCategoryList}" varStatus="status">
                                 <tr>
                                     <td><c:out value="${status.count}" /></td>
                                     <td>

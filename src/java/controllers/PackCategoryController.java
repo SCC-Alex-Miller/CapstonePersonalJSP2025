@@ -8,7 +8,7 @@ import business.Pack;
 import business.User;
 import business.PackCategory;
 import data.PackDA;
-import data.CategoryDA;
+import data.PackCategoryDA;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -29,13 +29,13 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class PackCategoryController extends HttpServlet {
 
-    private static final Logger LOG = Logger.getLogger(Category.class.getName());
+    private static final Logger LOG = Logger.getLogger(PackCategory.class.getName());
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        Users loggedInUser = (Users) request.getSession().getAttribute("loggedInUser");
-        Account activeAccount = (Account) request.getSession().getAttribute("activeAccount");
+        User loggedInUser = (User) request.getSession().getAttribute("loggedInUser");
+        //Account activeAccount = (Account) request.getSession().getAttribute("activeAccount");
 
         if (loggedInUser == null) {
             response.sendRedirect("Public");
@@ -44,7 +44,7 @@ public class PackCategoryController extends HttpServlet {
 
         LocalDate createdDate = LocalDate.now();
 
-        String url = "/expense.jsp";
+        String url = "/userPack.jsp";
         String action = request.getParameter("action");
         if (action == null) {
             action = "default";
@@ -53,17 +53,16 @@ public class PackCategoryController extends HttpServlet {
         HashMap<String, String> errors = new HashMap();
 
         String message;
-
-        //get and set expenselist 
-        LinkedHashMap<Integer, Category> categoryList = new LinkedHashMap();
+ 
+        LinkedHashMap<Integer, PackCategory> packCategoryList = new LinkedHashMap();
 
         try {
-            categoryList = CategoryDA.selectAllCategoriesByAccountID(activeAccount.getAccountID());
+            packCategoryList = PackCategoryDA.selectAllPackCategoriesByUserID(loggedInUser.getUserID());
         } catch (NamingException | SQLException ex) {
-            errors.put("categoryList", "Trouble getting category list");
+            errors.put("packCategoryList", "Trouble getting pack category list");
         }
 
-        request.setAttribute("categoryList", categoryList);
+        request.setAttribute("packCategoryList", packCategoryList);
 
         switch (action) {
             case "accountPage" -> {
@@ -72,19 +71,17 @@ public class PackCategoryController extends HttpServlet {
                 break;
             }
 
-            case "addCategory" -> {
-                String categoryName = request.getParameter("newCategoryName");
-                double budgetAmount = Double.parseDouble(request.getParameter("newBudgetAmount"));
+            case "addPackCategory" -> {
+                String packCategoryName = request.getParameter("newPackCategoryName");
 
-                Category category = new Category();
-                category.setCategoryName(categoryName);
-                category.setBudgetAmount(budgetAmount);
-                category.setAccountID(activeAccount.getAccountID());
-                category.setCreatedDate(createdDate);
+                PackCategory packCategory = new PackCategory();
+                packCategory.setPackCategoryName(packCategoryName);
+                packCategory.setFkUserID(loggedInUser.getUserID());
+                packCategory.setPackCategoryCreatedDate(createdDate);
 
                 try {
-                    if (!category.getCategoryName().equals(CategoryDA.doesCategoryNameExists(categoryName))) {
-                        CategoryDA.addCategory(category, category.getAccountID());
+                    if (!packCategory.getPackCategoryName().equals(PackCategoryDA.doesPackCategoryNameExists(packCategoryName))) {
+                        PackCategoryDA.addPackCategory(packCategory, packCategory.getFkUserID());
                         message = "Category created successfully.";
 
                     } else {
@@ -96,35 +93,33 @@ public class PackCategoryController extends HttpServlet {
                     message = "Naming & SQL error. Check DB.";
                 }
                 try {
-                    categoryList = CategoryDA.selectAllCategoriesByAccountID(activeAccount.getAccountID());
+                    packCategoryList = PackCategoryDA.selectAllPackCategoriesByUserID(loggedInUser.getUserID());
                 } catch (NamingException | SQLException ex) {
-                    errors.put("categoryList", "Trouble getting category list");
+                    errors.put("packCategoryList", "Trouble getting pack category list");
                 }
-                request.setAttribute("accountCategories", categoryList);
+                request.setAttribute("packCategoryList", packCategoryList);
                 request.setAttribute("errors", errors);
                 request.setAttribute("message", message);
                 request.getSession().setAttribute("loggedInUser", loggedInUser);
                 break;
             }
 
-            case "editCategory" -> {
-                int categoryID = Integer.parseInt(request.getParameter("categoryID"));
-                String categoryName = request.getParameter("updatedCategoryName");
-                double budgetAmount = Double.parseDouble(request.getParameter("updatedBudgetAmount"));
+            case "editPackCategory" -> {
+                int packCategoryID = Integer.parseInt(request.getParameter("packCategoryID"));
+                String packCategoryName = request.getParameter("updatedPackCategoryName");
 
-                Category category = new Category();
+                PackCategory packCategory = new PackCategory();
 
-                category.setCategoryID(categoryID);
-                category.setCategoryName(categoryName);
-                category.setBudgetAmount(budgetAmount);
+                packCategory.setPackCategoryID(packCategoryID);
+                packCategory.setPackCategoryName(packCategoryName);
 
                 try {
-                    if (!category.getCategoryName().equals(CategoryDA.doesCategoryNameExists(categoryName))) {
-                        CategoryDA.editCategory(category);
-                        message = "Category Updated.";
+                    if (!packCategory.getPackCategoryName().equals(PackCategoryDA.doesPackCategoryNameExists(packCategoryName))) {
+                        PackCategoryDA.editPackCategory(packCategory);
+                        message = "Pack Category Updated.";
                     } else {
-                        message = "Category Name already exists.";
-                        errors.put("Category Name", "already exists");
+                        message = "Pack Category Name Already Exists.";
+                        errors.put("Pack Category Name", "Already Exists");
                     }
                 } catch (NamingException | SQLException e) {
                     LOG.log(Level.SEVERE, url, e);
@@ -132,23 +127,23 @@ public class PackCategoryController extends HttpServlet {
 
                 }
                 try {
-                    categoryList = CategoryDA.selectAllCategoriesByAccountID(activeAccount.getAccountID());
+                    packCategoryList = PackCategoryDA.selectAllPackCategoriesByUserID(loggedInUser.getUserID());
                 } catch (NamingException | SQLException ex) {
-                    errors.put("categoryList", "Trouble getting category list");
+                    errors.put("packCategoryList", "Trouble getting pack category list");
                 }
-                request.setAttribute("accountCategories", categoryList);
+                request.setAttribute("packCategoryList", packCategoryList);
                 request.setAttribute("message", message);
                 request.setAttribute("loggedInUser", loggedInUser);
                 break;
             }
 
-            case "deleteCategory" -> {
+            case "deletePackCategory" -> {
 
                 String key = request.getParameter("key");
-                int delete = Integer.parseInt(key);
+                int deleteKey = Integer.parseInt(key);
                 try {
-                    CategoryDA.deleteCategory(delete);
-                    message = "Category Deleted.";
+                    PackCategoryDA.deletePackCategory(deleteKey);
+                    message = "Pack Category Deleted.";
                     request.setAttribute("message", message);
                 } catch (NamingException | SQLException e) {
                     LOG.log(Level.SEVERE, url, e);
@@ -156,11 +151,11 @@ public class PackCategoryController extends HttpServlet {
                     request.setAttribute("message", message);
                 }
                 try {
-                    categoryList = CategoryDA.selectAllCategoriesByAccountID(activeAccount.getAccountID());
+                    packCategoryList = PackCategoryDA.selectAllPackCategoriesByUserID(loggedInUser.getUserID());
                 } catch (NamingException | SQLException ex) {
                     errors.put("categoryList", "Trouble getting category list");
                 }
-                request.setAttribute("accountCategories", categoryList);
+                request.setAttribute("packCategoryList", packCategoryList);
                 request.setAttribute("loggedInUser", loggedInUser);
                 break;
 

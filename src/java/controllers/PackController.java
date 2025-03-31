@@ -9,6 +9,7 @@ import business.User;
 import data.PackDA;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -35,7 +36,7 @@ public class PackController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalDate currentDateTime = LocalDate.now();
 
         User loggedInUser = (User) request.getSession().getAttribute("loggedInUser");
         if (loggedInUser == null) {
@@ -62,26 +63,26 @@ public class PackController extends HttpServlet {
             case "addPack" -> {
 
                 String packName = request.getParameter("newPack");
+                int packCategoryID = Integer.parseInt(request.getParameter("packCategory"));
 
                 Pack pack = new Pack();
                 
                 pack.setPackName(packName);
-                account.setUser(loggedInUser);
-                account.setCreatedDate(currentDateTime);
+                pack.setPackCategoryID(packCategoryID);
+                pack.setPackHighScore(0);
+                pack.setPackHighScoreTime("00:00:00");
+                pack.setUser(loggedInUser);
+                pack.setCreatedDate(currentDateTime);
 
                 try {
-                    boolean alreadyCreated = AccountDA.doesAccountnameExists(accountName, account.getUser().getUserID());
+                    boolean alreadyCreated = PackDA.doesPackNameExists(packName);
 
                     if (!alreadyCreated) {
-                        AccountDA.createAccount(account);
+                        PackDA.addPack(pack);
                         message = "Account created successfully.";
-
-                        //UNABLE TO SEED DATA???
-                        int userAccountID = AccountDA.getAccountIDByNameAndUserID(account.getAccountName(), account.getUser().getUserID());
-                        CategoryDA.seedDefaultCategories(userAccountID);
                     } else {
-                        message = "Accountname already exists.";
-                        errors.put("accountname", "already exists");
+                        message = "packName already exists.";
+                        errors.put("packName", "already exists");
                     }
                 } catch (NamingException | SQLException e) {
                     LOG.log(Level.SEVERE, url, e);
@@ -94,5 +95,25 @@ public class PackController extends HttpServlet {
             }
 
         }
+        
+        getServletContext()
+                .getRequestDispatcher(url).forward(request, response);
+    }
+    
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    @Override
+    public String getServletInfo() {
+        return "Account Creation and Checkout";
     }
 }

@@ -7,6 +7,7 @@ package data;
 import business.Pack;
 import business.User;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,7 +21,7 @@ import javax.naming.NamingException;
  */
 public class PackDA {
     
-    public static LinkedHashMap<Integer, Pack> seeAllUserPacks(Pack pack) throws NamingException, SQLException {
+    public static LinkedHashMap<Integer, Pack> seeAllUserPacks(int userID) throws NamingException, SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps;
@@ -30,7 +31,7 @@ public class PackDA {
                 + "WHERE fkUserID = ?";
 
         ps = connection.prepareStatement(query);
-        ps.setInt(1, pack.getUser().getUserID());
+        ps.setInt(1, userID);
         rs = ps.executeQuery();
 
         LinkedHashMap<Integer, Pack> allUserPacks = new LinkedHashMap();
@@ -54,20 +55,45 @@ public class PackDA {
 
     }
     
+    public static boolean doesPackNameExists(String packName) throws NamingException, SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps;
+        ResultSet rs;
+
+        String query = "SELECT packName FROM pack "
+                + "WHERE packName = ?";
+
+        ps = connection.prepareStatement(query);
+        ps.setString(1, packName);
+        rs = ps.executeQuery();
+
+        boolean b = rs.next();
+
+        rs.close();
+        ps.close();
+        pool.freeConnection(connection);
+
+        return b;
+
+    }
+    
     public static int addPack(Pack pack) throws NamingException, SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps;
 
         String query
-                = "INSERT INTO pack (packName, fkUserID, createdDate) "
-                + "VALUES ( ?, ?, ?)";
+                = "INSERT INTO pack (packName, packCategoryName, packHighScore, packHighScoreTime, createdDate, fkUserID) "
+                + "VALUES ( ?, ?, ?, ?, ?, ?)";
 
         ps = connection.prepareStatement(query);
-        ps.setInt(1, account.getAccountID());
-        ps.setString(2, account.getAccountName());
-        ps.setInt(3, account.getUser().getUserID());
-        ps.setTimestamp(4, Timestamp.valueOf(account.getCreatedDate()));
+        ps.setString(1, pack.getPackName());
+        ps.setString(2, PackCategoryDA.selectPackCategory(pack.getPackCategoryID()).getPackCategoryName());
+        ps.setInt(3, pack.getPackHighScore());
+        ps.setString(4, pack.getPackHighScoreTime());
+        ps.setDate(5, Date.valueOf(pack.getCreatedDate()));
+        ps.setInt(6, pack.getUser().getUserID());
 
         int rows = ps.executeUpdate();
         ps.close();
