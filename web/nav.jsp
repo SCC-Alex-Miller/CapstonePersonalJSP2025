@@ -14,7 +14,7 @@
                         <a class="nav-link active" aria-current="page" href="Public?action=goToIndexPage">Welcome ${loggedInUser.username}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="Account?action=accountPage">Accounts</a>
+                        <a class="nav-link active" aria-current="page" href="Pack?action=userPackPage">Packs</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="Public?action=logout">Log Out</a>

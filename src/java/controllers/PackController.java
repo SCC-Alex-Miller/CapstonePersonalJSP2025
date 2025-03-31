@@ -79,7 +79,7 @@ public class PackController extends HttpServlet {
 
                     if (!alreadyCreated) {
                         PackDA.addPack(pack);
-                        message = "Account created successfully.";
+                        message = "Pack created successfully.";
                     } else {
                         message = "packName already exists.";
                         errors.put("packName", "already exists");

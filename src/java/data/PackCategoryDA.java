@@ -65,7 +65,7 @@ public class PackCategoryDA {
         if (rs.next()) {
             selectedPackCategory.setPackCategoryID(rs.getInt("packCategoryID"));
             selectedPackCategory.setPackCategoryName(rs.getString("packCategoryName"));
-            selectedPackCategory.setPackCategoryCreatedDate(rs.getDate("createdDate").toLocalDate());
+            selectedPackCategory.setPackCategoryCreatedDate(rs.getDate("packCategoryCreatedDate").toLocalDate());
             selectedPackCategory.setFkUserID(rs.getInt("fkUserID"));
         }
 

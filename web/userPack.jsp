@@ -81,15 +81,15 @@
 
                         <!-- USE A TABLE AND LIST FOR YOU TO SELECT EACH CREATED ACCOUNT -->
                         <c:if test="${!allUserPacks.isEmpty()}">
-                            <h1>Account Checkout</h1>
+                            <h1>Pack List</h1>
 
                             <table>               
                                 <tr>
 
                                     <th>Count</th>
-                                    <th>Checkout</th>
-                                    <th>Account</th>
-                                    <th>Delete Account</th>
+                                    <th>View</th>
+                                    <th>Pack</th>
+                                    <th>Delete Pack</th>
                                 </tr>
                                 <c:forEach var="pack" items="${allUserPacks}" varStatus="status">
                                     <tr>

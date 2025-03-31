@@ -6,6 +6,8 @@ package data;
 
 import business.Pack;
 import business.User;
+import business.PackCategory;
+import data.PackCategoryDA;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -82,6 +84,7 @@ public class PackDA {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps;
+        PackCategory packCategory = PackCategoryDA.selectPackCategory(pack.getPackCategoryID());
 
         String query
                 = "INSERT INTO pack (packName, packCategoryName, packHighScore, packHighScoreTime, createdDate, fkUserID) "
@@ -89,7 +92,7 @@ public class PackDA {
 
         ps = connection.prepareStatement(query);
         ps.setString(1, pack.getPackName());
-        ps.setString(2, PackCategoryDA.selectPackCategory(pack.getPackCategoryID()).getPackCategoryName());
+        ps.setString(2, packCategory.getPackCategoryName());
         ps.setInt(3, pack.getPackHighScore());
         ps.setString(4, pack.getPackHighScoreTime());
         ps.setDate(5, Date.valueOf(pack.getCreatedDate()));

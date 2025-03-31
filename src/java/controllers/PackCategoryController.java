@@ -12,7 +12,6 @@ import data.PackCategoryDA;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.logging.Level;
@@ -82,11 +81,11 @@ public class PackCategoryController extends HttpServlet {
                 try {
                     if (!packCategory.getPackCategoryName().equals(PackCategoryDA.doesPackCategoryNameExists(packCategoryName))) {
                         PackCategoryDA.addPackCategory(packCategory, packCategory.getFkUserID());
-                        message = "Category created successfully.";
+                        message = "Pack Category created successfully.";
 
                     } else {
-                        message = "Category Name already exists.";
-                        errors.put("Category Name", "already exists");
+                        message = "Pack Category Name already exists.";
+                        errors.put("Pack Category Name", "already exists");
                     }
                 } catch (NamingException | SQLException e) {
                     LOG.log(Level.SEVERE, url, e);
