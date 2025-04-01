@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 01, 2025 at 02:57 AM
+-- Generation Time: Apr 01, 2025 at 09:47 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -46,22 +46,12 @@ CREATE TABLE `card` (
 CREATE TABLE `pack` (
   `packID` int(11) NOT NULL,
   `packName` varchar(256) NOT NULL,
-  `packCategoryName` varchar(256) NOT NULL,
+  `fkPackCategoryID` int(11) NOT NULL,
   `packHighScore` int(11) NOT NULL,
   `packHighScoreTime` varchar(256) NOT NULL,
   `createdDate` date NOT NULL,
   `fkUserID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `pack`
---
-
-INSERT INTO `pack` (`packID`, `packName`, `packCategoryName`, `packHighScore`, `packHighScoreTime`, `createdDate`, `fkUserID`) VALUES
-(2, 'History Quiz', 'History', 0, '00:00:00', '2025-03-30', 1),
-(3, 'Math Test', 'Math', 0, '00:00:00', '2025-03-30', 1),
-(4, 'Science Final', 'Science', 0, '00:00:00', '2025-03-30', 1),
-(5, 'Vocab List', 'English', 0, '00:00:00', '2025-03-30', 1);
 
 -- --------------------------------------------------------
 
@@ -76,17 +66,6 @@ CREATE TABLE `packcategory` (
   `fkUserID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `packcategory`
---
-
-INSERT INTO `packcategory` (`packCategoryID`, `packCategoryName`, `packCategoryCreatedDate`, `fkUserID`) VALUES
-(3, 'History', '2025-03-30', 1),
-(4, 'Math', '2025-03-30', 1),
-(5, 'Science', '2025-03-30', 1),
-(6, 'English', '2025-03-30', 1),
-(7, 'Art', '2025-03-30', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -100,7 +79,6 @@ CREATE TABLE `report` (
   `reportUserNotes` varchar(256) NOT NULL,
   `reportAdminNotes` varchar(256) NOT NULL,
   `reportCreatedByID` int(11) NOT NULL,
-  `fkPackID` int(11) NOT NULL,
   `reportedUserID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -145,7 +123,8 @@ ALTER TABLE `card`
 --
 ALTER TABLE `pack`
   ADD PRIMARY KEY (`packID`),
-  ADD KEY `pack_fk_user` (`fkUserID`);
+  ADD KEY `pack_fk_user` (`fkUserID`),
+  ADD KEY `pack_fk_packCategory` (`fkPackCategoryID`);
 
 --
 -- Indexes for table `packcategory`
@@ -159,7 +138,6 @@ ALTER TABLE `packcategory`
 --
 ALTER TABLE `report`
   ADD PRIMARY KEY (`reportID`),
-  ADD KEY `report_fk_pack` (`fkPackID`),
   ADD KEY `report_fk_user_reportedUserID` (`reportedUserID`),
   ADD KEY `report_fk_user_reportCreatedByID` (`reportCreatedByID`);
 
@@ -217,6 +195,7 @@ ALTER TABLE `card`
 -- Constraints for table `pack`
 --
 ALTER TABLE `pack`
+  ADD CONSTRAINT `pack_fk_packCategory` FOREIGN KEY (`fkPackCategoryID`) REFERENCES `packcategory` (`packCategoryID`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `pack_fk_user` FOREIGN KEY (`fkUserID`) REFERENCES `user` (`userID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
@@ -229,7 +208,6 @@ ALTER TABLE `packcategory`
 -- Constraints for table `report`
 --
 ALTER TABLE `report`
-  ADD CONSTRAINT `report_fk_pack` FOREIGN KEY (`fkPackID`) REFERENCES `pack` (`packID`),
   ADD CONSTRAINT `report_fk_user_reportCreatedByID` FOREIGN KEY (`reportCreatedByID`) REFERENCES `user` (`userID`),
   ADD CONSTRAINT `report_fk_user_reportedUserID` FOREIGN KEY (`reportedUserID`) REFERENCES `user` (`userID`);
 COMMIT;
