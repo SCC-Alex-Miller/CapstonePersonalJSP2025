@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 29, 2025 at 06:00 PM
+-- Generation Time: Apr 01, 2025 at 02:57 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -33,6 +33,7 @@ CREATE TABLE `card` (
   `cardID` int(11) NOT NULL,
   `cardQuestion` varchar(256) NOT NULL,
   `cardImage` varchar(256) NOT NULL,
+  `cardAnswer` varchar(256) NOT NULL,
   `fkPackID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -48,9 +49,19 @@ CREATE TABLE `pack` (
   `packCategoryName` varchar(256) NOT NULL,
   `packHighScore` int(11) NOT NULL,
   `packHighScoreTime` varchar(256) NOT NULL,
-  `createdDate` datetime NOT NULL,
+  `createdDate` date NOT NULL,
   `fkUserID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `pack`
+--
+
+INSERT INTO `pack` (`packID`, `packName`, `packCategoryName`, `packHighScore`, `packHighScoreTime`, `createdDate`, `fkUserID`) VALUES
+(2, 'History Quiz', 'History', 0, '00:00:00', '2025-03-30', 1),
+(3, 'Math Test', 'Math', 0, '00:00:00', '2025-03-30', 1),
+(4, 'Science Final', 'Science', 0, '00:00:00', '2025-03-30', 1),
+(5, 'Vocab List', 'English', 0, '00:00:00', '2025-03-30', 1);
 
 -- --------------------------------------------------------
 
@@ -61,9 +72,20 @@ CREATE TABLE `pack` (
 CREATE TABLE `packcategory` (
   `packCategoryID` int(11) NOT NULL,
   `packCategoryName` varchar(256) NOT NULL,
-  `packCategoryCreatedDate` datetime NOT NULL,
+  `packCategoryCreatedDate` date NOT NULL,
   `fkUserID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `packcategory`
+--
+
+INSERT INTO `packcategory` (`packCategoryID`, `packCategoryName`, `packCategoryCreatedDate`, `fkUserID`) VALUES
+(3, 'History', '2025-03-30', 1),
+(4, 'Math', '2025-03-30', 1),
+(5, 'Science', '2025-03-30', 1),
+(6, 'English', '2025-03-30', 1),
+(7, 'Art', '2025-03-30', 1);
 
 -- --------------------------------------------------------
 
@@ -93,7 +115,8 @@ CREATE TABLE `user` (
   `username` varchar(256) NOT NULL,
   `email` varchar(256) NOT NULL,
   `password` varchar(256) NOT NULL,
-  `role` varchar(256) NOT NULL,
+  `isAdmin` tinyint(1) NOT NULL,
+  `reportStrikes` int(11) NOT NULL,
   `activeStatus` tinyint(1) NOT NULL,
   `adminMessage` varchar(256) DEFAULT NULL,
   `createdDate` datetime NOT NULL
@@ -103,8 +126,8 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`userID`, `username`, `email`, `password`, `role`, `activeStatus`, `adminMessage`, `createdDate`) VALUES
-(1, 'lhsamiller', 'lhsamiller@gmail.com', '11b51d3dfca351b2c722f92a502c3b74$4096$312e2c631fa216506f71cacec8113404b7ace9d26df37a4a9acf2084ab530c06', 'user', 1, '', '2025-03-24 00:00:00');
+INSERT INTO `user` (`userID`, `username`, `email`, `password`, `isAdmin`, `reportStrikes`, `activeStatus`, `adminMessage`, `createdDate`) VALUES
+(1, 'lhsamiller', 'lhsamiller@gmail.com', '11b51d3dfca351b2c722f92a502c3b74$4096$312e2c631fa216506f71cacec8113404b7ace9d26df37a4a9acf2084ab530c06', 0, 0, 1, '', '2025-03-24 00:00:00');
 
 --
 -- Indexes for dumped tables
@@ -160,13 +183,13 @@ ALTER TABLE `card`
 -- AUTO_INCREMENT for table `pack`
 --
 ALTER TABLE `pack`
-  MODIFY `packID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `packID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `packcategory`
 --
 ALTER TABLE `packcategory`
-  MODIFY `packCategoryID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `packCategoryID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `report`
