@@ -17,19 +17,21 @@ public class User implements Serializable {
     private String username;
     private String email;
     private String password;
-    private String role;
+    private boolean isAdmin;
+    private int reportStrikes;
     private boolean activeStatus;
     private String adminMessage;
     private LocalDate createdDate;
     
     public User(){}
     
-    public User(int userID, String username, String email, String password, String role, boolean activeStatus, String adminMessage, LocalDate createdDate){
+    public User(int userID, String username, String email, String password, boolean isAdmin, int reportStrikes, boolean activeStatus, String adminMessage, LocalDate createdDate){
         this.userID = userID;
         this.username = username;
         this.email = email;
         this.password = password;
-        this.role = role;
+        this.isAdmin = isAdmin;
+        this.reportStrikes = reportStrikes;
         this.activeStatus = activeStatus;
         this.adminMessage = adminMessage;
         this.createdDate = createdDate;
@@ -67,12 +69,12 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
+    public boolean getIsAdmin() {
+        return isAdmin;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setIsAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 
     public boolean isActiveStatus() {
@@ -97,6 +99,14 @@ public class User implements Serializable {
 
     public void setCreatedDate(LocalDate createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public int getReportStrikes() {
+        return reportStrikes;
+    }
+
+    public void setReportStrikes(int reportStrikes) {
+        this.reportStrikes = reportStrikes;
     }
     
     

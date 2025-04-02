@@ -40,7 +40,7 @@
                             <input type="text" name="email" value="<c:out value='${user.email}'/>" ><br><br>
                             <label>Password: </label>
                             <input type="text" name="password" value="<c:out value='${user.password}'/>" ><br><br>
-                            <input type="submit" value="register">
+                            <input type="submit" value="Register">
                         </form><br><br>
 
                         <p>Please create your account with this Registration Form for the first time.<br>

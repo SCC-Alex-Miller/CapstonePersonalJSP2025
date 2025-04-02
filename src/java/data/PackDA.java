@@ -87,12 +87,12 @@ public class PackDA {
         PackCategory packCategory = PackCategoryDA.selectPackCategory(pack.getPackCategoryID());
 
         String query
-                = "INSERT INTO pack (packName, packCategoryName, packHighScore, packHighScoreTime, createdDate, fkUserID) "
+                = "INSERT INTO pack (packName, fkPackCategoryID, packHighScore, packHighScoreTime, createdDate, fkUserID) "
                 + "VALUES ( ?, ?, ?, ?, ?, ?)";
 
         ps = connection.prepareStatement(query);
         ps.setString(1, pack.getPackName());
-        ps.setString(2, packCategory.getPackCategoryName());
+        ps.setInt(2, packCategory.getPackCategoryID());
         ps.setInt(3, pack.getPackHighScore());
         ps.setString(4, pack.getPackHighScoreTime());
         ps.setDate(5, Date.valueOf(pack.getCreatedDate()));

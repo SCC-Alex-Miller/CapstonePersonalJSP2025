@@ -22,17 +22,18 @@ public class UserDA {
         PreparedStatement ps = null;
 
         String query
-                = "INSERT INTO user (username, email, password, role, activeStatus, adminMessage, createdDate) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                = "INSERT INTO user (username, email, password, isAdmin, reportStrikes, activeStatus, adminMessage, createdDate) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         ps = connection.prepareStatement(query);
         ps.setString(1, user.getUsername());
         ps.setString(2, user.getEmail());
         ps.setString(3, user.getPassword());
-        ps.setString(4, user.getRole());
-        ps.setBoolean(5, user.isActiveStatus());
-        ps.setString(6, user.getAdminMessage());
-        ps.setDate(7, Date.valueOf(user.getCreatedDate()));
+        ps.setBoolean(4, user.getIsAdmin());
+        ps.setInt(5, user.getReportStrikes());
+        ps.setBoolean(6, user.isActiveStatus());
+        ps.setString(7, user.getAdminMessage());
+        ps.setDate(8, Date.valueOf(user.getCreatedDate()));
 
         int rows = ps.executeUpdate();
         ps.close();
@@ -83,7 +84,8 @@ public class UserDA {
             user.setUsername(rs.getString("username"));
             user.setEmail(rs.getString("email"));
             user.setPassword(rs.getString("password"));
-            user.setRole(rs.getString("role"));
+            user.setIsAdmin(rs.getBoolean("isAdmin"));
+            user.setReportStrikes(rs.getInt("reportStrikes"));
             user.setActiveStatus(rs.getBoolean("activeStatus"));
             user.setAdminMessage(rs.getString("adminMessage"));
             user.setCreatedDate(rs.getDate("createdDate").toLocalDate());
@@ -119,7 +121,8 @@ public class UserDA {
             user.setUsername(rs.getString("username"));
             user.setEmail(rs.getString("email"));
             user.setPassword(rs.getString("password"));
-            user.setRole(rs.getString("role"));
+            user.setIsAdmin(rs.getBoolean("isAdmin"));
+            user.setReportStrikes(rs.getInt("reportStrikes"));
             user.setActiveStatus(rs.getBoolean("activeStatus"));
             user.setAdminMessage(rs.getString("adminMessage"));
             user.setCreatedDate(rs.getDate("createdDate").toLocalDate());
@@ -153,7 +156,8 @@ public class UserDA {
             user.setUsername(rs.getString("username"));
             user.setEmail(rs.getString("email"));
             user.setPassword(rs.getString("password"));
-            user.setRole(rs.getString("role"));
+            user.setIsAdmin(rs.getBoolean("isAdmin"));
+            user.setReportStrikes(rs.getInt("reportStrikes"));
             user.setActiveStatus(rs.getBoolean("activeStatus"));
             user.setAdminMessage(rs.getString("adminMessage"));
             user.setCreatedDate(rs.getDate("createdDate").toLocalDate());

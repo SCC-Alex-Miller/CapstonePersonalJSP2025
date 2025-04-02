@@ -96,7 +96,8 @@ public class Public extends HttpServlet {
                 String username = request.getParameter("username");
                 String email = request.getParameter("email");
                 String password = request.getParameter("password");
-                String role = "user";
+                boolean isAdmin = false;
+                int reportStrikes = 0;
                 boolean activeStatus = true;
                 String adminMessage = "";
                 LocalDate createdDate = LocalDate.now();
@@ -152,7 +153,8 @@ public class Public extends HttpServlet {
 
                 if (errors.isEmpty()) {
                     user.setPassword(hash);
-                    user.setRole(role);
+                    user.setIsAdmin(isAdmin);
+                    user.setReportStrikes(reportStrikes);
                     user.setActiveStatus(activeStatus);
                     user.setAdminMessage(adminMessage);
                     user.setCreatedDate(createdDate);
