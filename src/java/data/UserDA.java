@@ -114,9 +114,8 @@ public class UserDA {
         ps.setInt(1, userID);
         rs = ps.executeQuery();
         
-        User user = null;
+        User user = new User();
         if (rs.next()) {
-            user = new User();
             user.setUserID(rs.getInt("userID"));
             user.setUsername(rs.getString("username"));
             user.setEmail(rs.getString("email"));
@@ -126,7 +125,6 @@ public class UserDA {
             user.setActiveStatus(rs.getBoolean("activeStatus"));
             user.setAdminMessage(rs.getString("adminMessage"));
             user.setCreatedDate(rs.getDate("createdDate").toLocalDate());
-            return user;
         }
         
         rs.close();
