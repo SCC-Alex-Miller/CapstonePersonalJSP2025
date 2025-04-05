@@ -96,10 +96,10 @@
                                         <td><c:out value="${status.count}" /></td>
                                         <td>
                                             <form action="Pack" method="post">
-                                                <input type="hidden" name="action" value="checkoutPack">
+                                                <input type="hidden" name="action" value="viewPack">
                                                 <input type="hidden" name="packID" value="<c:out value='${pack.key}' />">
                                                 <input type="hidden" name="packName" value="<c:out value='${pack.value.packName}' />">
-                                                <input type="submit" value="Checkout">
+                                                <input type="submit" value="View">
                                             </form>
                                         </td>
                                         <td>

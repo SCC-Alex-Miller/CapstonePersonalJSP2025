@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 01, 2025 at 09:47 PM
+-- Generation Time: Apr 05, 2025 at 09:20 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -32,7 +32,7 @@ USE `flashcard`;
 CREATE TABLE `card` (
   `cardID` int(11) NOT NULL,
   `cardQuestion` varchar(256) NOT NULL,
-  `cardImage` varchar(256) NOT NULL,
+  `cardImage` varchar(256) DEFAULT NULL,
   `cardAnswer` varchar(256) NOT NULL,
   `fkPackID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -53,6 +53,13 @@ CREATE TABLE `pack` (
   `fkUserID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `pack`
+--
+
+INSERT INTO `pack` (`packID`, `packName`, `fkPackCategoryID`, `packHighScore`, `packHighScoreTime`, `createdDate`, `fkUserID`) VALUES
+(6, 'History Quiz', 8, 0, '00:00:00', '2025-04-01', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -65,6 +72,13 @@ CREATE TABLE `packcategory` (
   `packCategoryCreatedDate` date NOT NULL,
   `fkUserID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `packcategory`
+--
+
+INSERT INTO `packcategory` (`packCategoryID`, `packCategoryName`, `packCategoryCreatedDate`, `fkUserID`) VALUES
+(8, 'History', '2025-04-01', 2);
 
 -- --------------------------------------------------------
 
@@ -105,7 +119,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`userID`, `username`, `email`, `password`, `isAdmin`, `reportStrikes`, `activeStatus`, `adminMessage`, `createdDate`) VALUES
-(1, 'lhsamiller', 'lhsamiller@gmail.com', '11b51d3dfca351b2c722f92a502c3b74$4096$312e2c631fa216506f71cacec8113404b7ace9d26df37a4a9acf2084ab530c06', 0, 0, 1, '', '2025-03-24 00:00:00');
+(2, 'lhsamiller', 'lhsamiller@gmail.com', 'aca483d8c5229c79628a679a31ab5f28$4096$fda1707f582f0cfb6ad436ad03de6a027eebb9b20ed5248aa8bb0715a19f11ca', 0, 0, 1, '', '2025-04-01 00:00:00');
 
 --
 -- Indexes for dumped tables
@@ -161,13 +175,13 @@ ALTER TABLE `card`
 -- AUTO_INCREMENT for table `pack`
 --
 ALTER TABLE `pack`
-  MODIFY `packID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `packID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `packcategory`
 --
 ALTER TABLE `packcategory`
-  MODIFY `packCategoryID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `packCategoryID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `report`
@@ -179,7 +193,7 @@ ALTER TABLE `report`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables

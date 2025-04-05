@@ -93,6 +93,20 @@ public class PackController extends HttpServlet {
                 request.setAttribute("message", message);
                 break;
             }
+            
+            case "viewPack" -> {
+                int packID = Integer.parseInt(request.getParameter("packID"));
+                String packName = request.getParameter("packName");
+                
+                Pack activePack = new Pack();
+                activePack.setPackID(packID);
+                activePack.setPackName(packName);
+                activePack.setUser(loggedInUser);
+                
+                request.getSession().setAttribute("activePack", activePack);
+                url = "/individualPack.jsp";
+                break;
+            }
 
         }
         
