@@ -23,7 +23,7 @@
         response.sendRedirect("Public");
         return;
     }
-    
+
     Pack activePack = (Pack) request.getSession().getAttribute("activePack");
     if (activePack == null) {
         String message = "Pack Unavailable";
@@ -73,11 +73,9 @@
 
                             <table>               
                                 <tr>
-
-                                    <th>Count</th>
-                                    <th>View</th>
-                                    <th>Card</th>
-                                    <th>Delete Pack</th>
+                                    <th style="width: 60px; text-align: center;">#</th>
+                                    <th style="width: 100%;">Card</th>
+                                    <th style="width: 60px; text-align: center;">Delete</th>
                                 </tr>
                                 <c:forEach var="card" items="${packCards}" varStatus="status">
                                     <tr>
@@ -85,28 +83,20 @@
                                         <td>
                                             <form action="Card" method="post">
                                                 <input type="hidden" name="cardID" value="<c:out value='${card.key}' />">
-                                                <input type="text" name="cardQuestion" value="<c:out value='${card.value.cardQuestion}' />">
-                                                <input type="text" name="cardAnswer" value="<c:out value='${card.value.cardAnswer}' />">
+                                                <input type="text" name="cardQuestion" class="form-control flex-grow-1" value="<c:out value='${card.value.cardQuestion}' />">
+                                                <input type="text" name="cardAnswer" class="form-control flex-grow-1" value="<c:out value='${card.value.cardAnswer}' />">
                                             </form>
                                         </td>
-                                        <td>
-                                            <form id="editForm" action="Pack" method="post">
-                                                <input type="hidden" name="action" value="editPack">
-                                                <input type="hidden" name="packID" value="<c:out value='${pack.key}' />">
-                                                <input type="hidden" name="userID" value="<c:out value='${pack.value.user.userID}' />">
-                                                <div class="rowFlex">
-                                                    <input type="submit" value="Update">
-                                                    <input type="text" id="packText" name="updatedPackName" value="<c:out value="${pack.value.packName}" />">
-                                                </div>
+                                        <td class="text-center" style="width: 80px;">
+                                            <form action="Card" method="post">
+                                                <input type="hidden" name="action" value="deleteCard">
+                                                <input type="hidden" name="key" value="<c:out value='${card.key}' />">
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    Delete
+                                                </button>
                                             </form>
                                         </td>
-                                        <td>
-                                            <form action="Pack" method="post">
-                                                <input type="hidden" name="action" value="deletePack">
-                                                <input type="hidden" name="key" value="<c:out value='${pack.key}' />">
-                                                <input type="submit" value="Delete">
-                                            </form>
-                                        </td>
+
                                     </tr>
                                 </c:forEach>
                             </table>
@@ -118,11 +108,11 @@
                             <input type="hidden" name="action" value="addCard">
                             <div class="columnFlex">
                                 <label for="cardQuestion">Card Question</label>
-                                <input type="text" name="cardQuestion" required><br>
+                                <input type="text" name="cardQuestion" class="form-control flex-grow-1" required><br>
                             </div>
                             <div class="columnFlex">
                                 <label for="cardAnswer">Card Answer</label>
-                                <input type="text" name="cardAnswer" required><br>
+                                <input type="text" name="cardAnswer" class="form-control flex-grow-1" required><br>
                             </div>
                             <input type="submit" value="Submit" id="Submit">
                         </form>

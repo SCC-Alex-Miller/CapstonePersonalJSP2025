@@ -85,10 +85,9 @@
 
                             <table>               
                                 <tr>
-
-                                    <th>Count</th>
+                                    <th>#</th>
                                     <th>View</th>
-                                    <th>Pack</th>
+                                    <th>Pack Name</th>
                                     <th>Delete Pack</th>
                                 </tr>
                                 <c:forEach var="pack" items="${allUserPacks}" varStatus="status">
@@ -108,8 +107,8 @@
                                                 <input type="hidden" name="packID" value="<c:out value='${pack.key}' />">
                                                 <input type="hidden" name="userID" value="<c:out value='${pack.value.user.userID}' />">
                                                 <div class="rowFlex">
-                                                    <input type="submit" value="Update">
                                                     <input type="text" id="packText" name="updatedPackName" value="<c:out value="${pack.value.packName}" />">
+                                                    <input type="submit" value="Update">
                                                 </div>
                                             </form>
                                         </td>
@@ -150,8 +149,8 @@
                                             <input type="hidden" name="action" value="editPackCategory">
                                             <input type="hidden" name="packCategoryID" value="<c:out value='${packCategory.key}' />">
                                             <div class="rowFlex">
-                                                <input type="submit" value="Edit">
                                                 <input type="text" id="packCategoryName" name="editedPackCategoryName" value="<c:out value="${packCategory.value.packCategoryName}" />">
+                                                <input type="submit" value="Edit">
                                             </div>
                                         </form>
                                     </td>
