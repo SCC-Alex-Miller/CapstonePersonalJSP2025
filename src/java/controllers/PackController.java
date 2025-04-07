@@ -4,8 +4,10 @@
  */
 package controllers;
 
+import business.Card;
 import business.Pack;
 import business.User;
+import data.CardDA;
 import data.PackDA;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -66,7 +68,7 @@ public class PackController extends HttpServlet {
                 int packCategoryID = Integer.parseInt(request.getParameter("packCategory"));
 
                 Pack pack = new Pack();
-                
+
                 pack.setPackName(packName);
                 pack.setPackCategoryID(packCategoryID);
                 pack.setPackHighScore(0);
@@ -93,27 +95,51 @@ public class PackController extends HttpServlet {
                 request.setAttribute("message", message);
                 break;
             }
-            
+
             case "viewPack" -> {
                 int packID = Integer.parseInt(request.getParameter("packID"));
                 String packName = request.getParameter("packName");
-                
+
                 Pack activePack = new Pack();
                 activePack.setPackID(packID);
                 activePack.setPackName(packName);
                 activePack.setUser(loggedInUser);
-                
+
                 request.getSession().setAttribute("activePack", activePack);
                 url = "/individualPack.jsp";
                 break;
             }
 
+            case "studyPack" -> {
+                int packID = Integer.parseInt(request.getParameter("packID"));
+                String packName = request.getParameter("packName");
+
+                Pack activePack = new Pack();
+                activePack.setPackID(packID);
+                activePack.setPackName(packName);
+                activePack.setUser(loggedInUser);
+
+                request.getSession().setAttribute("activePack", activePack);
+
+                LinkedHashMap<Integer, Card> packCards = new LinkedHashMap();
+
+                try {
+                    packCards = CardDA.selectPackCards(activePack.getPackID());
+                } catch (NamingException | SQLException ex) {
+                    errors.put("packCards", "Trouble getting pack cards");
+                }
+
+                request.setAttribute("packCards", packCards);
+                url = "/studySession.jsp";
+                break;
+            }
+
         }
-        
+
         getServletContext()
                 .getRequestDispatcher(url).forward(request, response);
     }
-    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

@@ -86,6 +86,7 @@
                             <table>               
                                 <tr>
                                     <th>#</th>
+                                    <th>Study</th>
                                     <th>View</th>
                                     <th>Pack Name</th>
                                     <th>Delete Pack</th>
@@ -93,6 +94,14 @@
                                 <c:forEach var="pack" items="${allUserPacks}" varStatus="status">
                                     <tr>
                                         <td><c:out value="${status.count}" /></td>
+                                        <td>
+                                            <form action="Pack" method="post">
+                                                <input type="hidden" name="action" value="studyPack">
+                                                <input type="hidden" name="packID" value="<c:out value='${pack.key}' />">
+                                                <input type="hidden" name="packName" value="<c:out value='${pack.value.packName}' />">
+                                                <input type="submit" value="Study">
+                                            </form>
+                                        </td>
                                         <td>
                                             <form action="Pack" method="post">
                                                 <input type="hidden" name="action" value="viewPack">
