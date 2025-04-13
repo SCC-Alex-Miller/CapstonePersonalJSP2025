@@ -81,7 +81,7 @@
 
             <div id="sessionComplete" class="d-none mt-4">
                 <h3>Study Session Complete!</h3>
-                <a href="dashboard.jsp" class="btn btn-primary">Return to Dashboard</a>
+                <a href="dashboard.jsp" class="btn btn-primary">View Results</a>
             </div>
         </div>
 
@@ -116,48 +116,37 @@
             function showCard(index) {
                 const card = packCards[index];
 
-                // Immediately update the content before flip
                 if (!flipped) {
-                    // Set the question on the front
                     document.getElementById("cardFrontContent").textContent = card.question;
-                    // Clear the back content
                     document.getElementById("cardBackContent").textContent = "";
                 } else {
-                    // Clear the front content
                     document.getElementById("cardFrontContent").textContent = "";
-                    // Set the answer on the back
                     document.getElementById("cardBackContent").textContent = card.answer;
                 }
 
-                // Show card controls (Right/Wrong buttons)
                 cardControls.classList.remove("d-none");
 
-                // Show or hide answer buttons based on whether the card is flipped
                 if (flipped) {
                     answerButtons.classList.remove("d-none");
                 } else {
                     answerButtons.classList.add("d-none");
                 }
 
-                // Ensure that the card doesn't disappear after the animation ends
                 const flipCard = document.getElementById("flipCard");
-                flipCard.classList.remove("flipped"); // Remove the flip effect initially
+                flipCard.classList.remove("flipped");
             }
 
             function flipCard() {
                 flipped = !flipped;
 
-                // Set the content before starting the animation
                 showCard(currentIndex);
 
-                // Apply flip animation after content is updated
                 setTimeout(function () {
                     document.getElementById("flipCard").classList.toggle("flipped");
-                }, 50); // Ensure content updates before animation starts
+                }, 50);
             }
 
             function markCard(result) {
-                // Mark the card as right or wrong and fetch the next card
                 fetch("StudySessionController", {
                     method: "POST",
                     headers: {"Content-Type": "application/x-www-form-urlencoded"},
@@ -177,7 +166,6 @@
                 });
             }
 
-            // Initial setup: Show the first card if available
             if (packCards.length > 0) {
                 showCard(0);
             } else {
