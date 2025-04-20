@@ -124,7 +124,7 @@
                                         <td>
                                             <form action="Pack" method="post">
                                                 <input type="hidden" name="action" value="deletePack">
-                                                <input type="hidden" name="key" value="<c:out value='${pack.key}' />">
+                                                <input type="hidden" name="packID" value="${pack.value.packID}">
                                                 <input type="submit" value="Delete">
                                             </form>
                                         </td>

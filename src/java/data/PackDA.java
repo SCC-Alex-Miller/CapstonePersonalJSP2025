@@ -104,4 +104,23 @@ public class PackDA {
         return rows;
 
     }
+    
+    public static int deletePack(int packID) throws NamingException, SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps;
+
+        String query = "DELETE from pack "
+                + "WHERE packID = ?";
+
+        ps = connection.prepareStatement(query);
+        ps.setInt(1, packID);
+
+        int rows = ps.executeUpdate();
+        ps.close();
+        pool.freeConnection(connection);
+        return rows;
+    }
+    
+    
 }

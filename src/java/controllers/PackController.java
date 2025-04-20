@@ -126,11 +126,24 @@ public class PackController extends HttpServlet {
                 try {
                     packCards = CardDA.selectPackCards(activePack.getPackID());
                 } catch (NamingException | SQLException ex) {
-                    errors.put("packCards", "Trouble getting pack cards");
+                    errors.put("packCards", "Trouble getting pack cards for study");
                 }
 
                 request.setAttribute("packCards", packCards);
                 url = "/studySession.jsp";
+                break;
+            }
+
+            case "deletePack" -> {
+                int packID = Integer.parseInt(request.getParameter("packID"));
+
+                try {
+                    PackDA.deletePack(packID);
+                } catch (NamingException | SQLException ex) {
+                    errors.put("pack", "Trouble deleting pack");
+                }
+                
+                url = "/userPack.jsp";
                 break;
             }
 
