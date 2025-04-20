@@ -73,4 +73,21 @@ public class CardDA {
         return rows;
 
     }
+    
+    public static int deleteCard(int cardID) throws NamingException, SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps;
+
+        String query = "DELETE from card "
+                + "WHERE cardID = ?";
+
+        ps = connection.prepareStatement(query);
+        ps.setInt(1, cardID);
+
+        int rows = ps.executeUpdate();
+        ps.close();
+        pool.freeConnection(connection);
+        return rows;
+    }
 }

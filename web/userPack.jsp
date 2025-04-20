@@ -125,7 +125,7 @@
                                             <form action="Pack" method="post">
                                                 <input type="hidden" name="action" value="deletePack">
                                                 <input type="hidden" name="packID" value="${pack.value.packID}">
-                                                <input type="submit" value="Delete">
+                                                <input type="submit" value="Delete" class="btn btn-sm btn-danger">
                                             </form>
                                         </td>
                                     </tr>

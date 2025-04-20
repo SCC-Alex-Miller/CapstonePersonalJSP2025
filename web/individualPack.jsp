@@ -73,9 +73,9 @@
 
                             <table>               
                                 <tr>
-                                    <th style="width: 60px; text-align: center;">#</th>
+                                    <th>#</th>
                                     <th style="width: 100%;">Card</th>
-                                    <th style="width: 60px; text-align: center;">Delete</th>
+                                    <th>Delete</th>
                                 </tr>
                                 <c:forEach var="card" items="${packCards}" varStatus="status">
                                     <tr>
@@ -87,13 +87,11 @@
                                                 <input type="text" name="cardAnswer" class="form-control flex-grow-1" value="<c:out value='${card.value.cardAnswer}' />">
                                             </form>
                                         </td>
-                                        <td class="text-center" style="width: 80px;">
+                                        <td class="text-center">
                                             <form action="Card" method="post">
                                                 <input type="hidden" name="action" value="deleteCard">
-                                                <input type="hidden" name="key" value="<c:out value='${card.key}' />">
-                                                <button type="submit" class="btn btn-sm btn-danger">
-                                                    Delete
-                                                </button>
+                                                <input type="hidden" name="cardID" value="${card.value.cardID}">
+                                                <input type="submit" value="Delete" class="btn btn-sm btn-danger">
                                             </form>
                                         </td>
 

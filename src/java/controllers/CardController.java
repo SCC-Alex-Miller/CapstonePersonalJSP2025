@@ -68,7 +68,7 @@ public class CardController extends HttpServlet {
         request.setAttribute("packCards", packCards);
 
         switch (action) {
-            case "addCard": {
+            case "addCard" -> {
 
                 String cardQuestion = request.getParameter("cardQuestion");
                 String cardAnswer = request.getParameter("cardAnswer");
@@ -111,6 +111,19 @@ public class CardController extends HttpServlet {
                 request.setAttribute("packCards", packCards);
                 request.setAttribute("errors", errors);
 
+                break;
+            }
+            
+            case "deleteCard" -> {
+                int cardID = Integer.parseInt(request.getParameter("cardID"));
+
+                try {
+                    CardDA.deleteCard(cardID);
+                } catch (NamingException | SQLException ex) {
+                    errors.put("pack", "Trouble deleting card");
+                }
+                
+                url = "/individualPack.jsp";
                 break;
             }
             
