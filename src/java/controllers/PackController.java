@@ -61,6 +61,18 @@ public class PackController extends HttpServlet {
             case "userPackPage" -> {
                 break;
             }
+            
+            case "publicPackPage" -> {
+                
+                url = "/publicPack.jsp";
+                break;
+            }
+            
+            case "downloadPack" -> {
+                
+                url = "/publicPack.jsp";
+                break;
+            }
 
             case "addPack" -> {
 

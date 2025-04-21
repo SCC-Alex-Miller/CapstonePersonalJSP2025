@@ -42,9 +42,21 @@ public class PackDA {
             User user = new User();
             packs.setPackID(rs.getInt("packID"));
             packs.setPackName(rs.getString("packName"));
+            packs.setPackCategoryID(rs.getInt("fkPackCategoryID"));
+            packs.setIsPublic(rs.getBoolean("isPublic"));
             user.setUserID(rs.getInt("fkUserID"));
             packs.setUser(user);
             packs.setCreatedDate(rs.getDate("createdDate").toLocalDate());
+            
+            PackCategory packCategory = new PackCategory();
+            
+            try {
+                    packCategory = PackCategoryDA.selectPackCategory(packs.getPackCategoryID());
+                } catch (NamingException | SQLException ex) {
+                    
+                }
+            
+            packs.setPackCategoryName(packCategory.getPackCategoryName());
 
             allUserPacks.put(packs.getPackID(), packs);
         }
@@ -55,6 +67,82 @@ public class PackDA {
 
         return allUserPacks;
 
+    }
+    
+    public static LinkedHashMap<Integer, Pack> seeAllPublicPacks() throws NamingException, SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps;
+        ResultSet rs;
+
+        String query = "SELECT * FROM pack "
+                + "WHERE isPublic = ?";
+
+        ps = connection.prepareStatement(query);
+        ps.setBoolean(1, true);
+        rs = ps.executeQuery();
+
+        LinkedHashMap<Integer, Pack> allPublicPacks = new LinkedHashMap();
+        while (rs.next()) {
+            Pack packs = new Pack();
+            User user = new User();
+            packs.setPackID(rs.getInt("packID"));
+            packs.setPackName(rs.getString("packName"));
+            packs.setPackCategoryID(rs.getInt("fkPackCategoryID"));
+            packs.setIsPublic(rs.getBoolean("isPublic"));
+            user.setUserID(rs.getInt("fkUserID"));
+            packs.setUser(user);
+            packs.setCreatedDate(rs.getDate("createdDate").toLocalDate());
+            
+            PackCategory packCategory = new PackCategory();
+            
+            try {
+                    packCategory = PackCategoryDA.selectPackCategory(packs.getPackCategoryID());
+                } catch (NamingException | SQLException ex) {
+                    
+                }
+            
+            packs.setPackCategoryName(packCategory.getPackCategoryName());
+
+            allPublicPacks.put(packs.getPackID(), packs);
+        }
+
+        rs.close();
+        ps.close();
+        pool.freeConnection(connection);
+
+        return allPublicPacks;
+
+    }
+    
+    public static Pack selectPack(int packID) throws NamingException, SQLException {
+     
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps;
+        ResultSet rs;
+
+        String query = "SELECT * FROM pack "
+                + "WHERE packID = ?";
+
+        ps = connection.prepareStatement(query);
+        ps.setInt(1, packID);
+        rs = ps.executeQuery();
+        
+        Pack pack = new Pack();
+        User user = new User();
+        
+        if (rs.next()) {
+            pack.setPackID(rs.getInt("packID"));
+            pack.setPackName(rs.getString("packName"));
+            pack.setPackCategoryID(rs.getInt("fkPackCategoryID"));
+            pack.setIsPublic(rs.getBoolean("isPublic"));
+            user.setUserID(rs.getInt("fkUserID"));
+            pack.setUser(user);
+            pack.setCreatedDate(rs.getDate("createdDate").toLocalDate());
+        }
+        
+        return pack;
     }
     
     public static boolean doesPackNameExists(String packName) throws NamingException, SQLException {

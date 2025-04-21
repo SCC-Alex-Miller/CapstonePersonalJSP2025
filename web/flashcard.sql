@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 05, 2025 at 09:20 PM
+-- Generation Time: Apr 21, 2025 at 07:40 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -37,6 +37,15 @@ CREATE TABLE `card` (
   `fkPackID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `card`
+--
+
+INSERT INTO `card` (`cardID`, `cardQuestion`, `cardImage`, `cardAnswer`, `fkPackID`) VALUES
+(4, 'Who was the first president of the United States?', NULL, 'George Washington', 7),
+(7, 'What cities did the U.S. drop atomic bombs on in WW2?', NULL, 'Hiroshima and Nagasaki', 7),
+(8, 'Columbus sailed the ocean blue...', NULL, 'in 1492!', 7);
+
 -- --------------------------------------------------------
 
 --
@@ -47,6 +56,7 @@ CREATE TABLE `pack` (
   `packID` int(11) NOT NULL,
   `packName` varchar(256) NOT NULL,
   `fkPackCategoryID` int(11) NOT NULL,
+  `isPublic` tinyint(1) NOT NULL,
   `packHighScore` int(11) NOT NULL,
   `packHighScoreTime` varchar(256) NOT NULL,
   `createdDate` date NOT NULL,
@@ -57,8 +67,9 @@ CREATE TABLE `pack` (
 -- Dumping data for table `pack`
 --
 
-INSERT INTO `pack` (`packID`, `packName`, `fkPackCategoryID`, `packHighScore`, `packHighScoreTime`, `createdDate`, `fkUserID`) VALUES
-(6, 'History Quiz', 8, 0, '00:00:00', '2025-04-01', 2);
+INSERT INTO `pack` (`packID`, `packName`, `fkPackCategoryID`, `isPublic`, `packHighScore`, `packHighScoreTime`, `createdDate`, `fkUserID`) VALUES
+(7, 'History Quiz', 8, 0, 0, '00:00:00', '2025-04-19', 2),
+(8, 'History Test', 8, 0, 0, '00:00:00', '2025-04-20', 2);
 
 -- --------------------------------------------------------
 
@@ -78,7 +89,8 @@ CREATE TABLE `packcategory` (
 --
 
 INSERT INTO `packcategory` (`packCategoryID`, `packCategoryName`, `packCategoryCreatedDate`, `fkUserID`) VALUES
-(8, 'History', '2025-04-01', 2);
+(8, 'History', '2025-04-01', 2),
+(10, 'Math', '2025-04-20', 2);
 
 -- --------------------------------------------------------
 
@@ -169,19 +181,19 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `card`
 --
 ALTER TABLE `card`
-  MODIFY `cardID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `cardID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `pack`
 --
 ALTER TABLE `pack`
-  MODIFY `packID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `packID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `packcategory`
 --
 ALTER TABLE `packcategory`
-  MODIFY `packCategoryID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `packCategoryID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `report`

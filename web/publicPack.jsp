@@ -1,6 +1,6 @@
 <%-- 
-    Document   : personalPack
-    Created on : Mar 25, 2025, 9:32:10 PM
+    Document   : publicPack
+    Created on : Apr 21, 2025, 1:12:08 PM
     Author     : lando
 --%>
 
@@ -30,11 +30,8 @@
     String error = "";
 
     try {
-        LinkedHashMap<Integer, Pack> allUserPacks = PackDA.seeAllUserPacks(loggedInUser.getUserID());
-        request.setAttribute("allUserPacks", allUserPacks);
-
-        LinkedHashMap<Integer, PackCategory> packCategoryList = PackCategoryDA.selectAllPackCategoriesByUserID(loggedInUser.getUserID());
-        request.setAttribute("packCategoryList", packCategoryList);
+        LinkedHashMap<Integer, Pack> allPublicPacks = PackDA.seeAllPublicPacks();
+        request.setAttribute("allPublicPacks", allPublicPacks);
 
     } catch (NamingException | SQLException e) {
         error = "Issue populating Accounts for User.";
@@ -46,7 +43,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Accounts</title>
+        <title>Public Packs</title>
         <link rel="stylesheet" href="styles/main.css" type="text/css"/>
         <link rel="stylesheet" href="styles/css-bootstrap/bootstrap.css">
     </head>
@@ -60,29 +57,11 @@
             <div class="row justify-content-center">
                 <div class="row justify-content-center">
                     <div class="col-6">
-                        <h1>${user.username}</h1>
-                        <form action="Pack" method="post">
-                            <h1>Pack Creation</h1>
-                            <input type="hidden" name="action" value="addPack">
-                            <div class="columnFlex">
-                                <label for="newPack">Pack Name</label>
-                                <input type="text" name="newPack" required><br>
-                                <select name="packCategory">
-                                    <option value="" disabled selected>Select your option</option>
-                                    <c:forEach items="${packCategoryList}" var="packCategory" >
-                                        <option value="${packCategory.value.packCategoryID}" >${packCategory.value.packCategoryName}</option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                            <input type="submit" value="Submit" id="submit">
-                        </form>
-                        <br>
+                        <h1>Public Packs</h1>
                         <h3><c:out value= "${message}"/></h3>
                         <h3><c:out value= "${error}"/></h3>
 
-                        <c:if test="${!allUserPacks.isEmpty()}">
-                            <h1>Pack List</h1>
-
+                        <c:if test="${!allPublicPacks.isEmpty()}">
                             <table>               
                                 <tr>
                                     <th>#</th>
@@ -90,9 +69,9 @@
                                     <th>View</th>
                                     <th style="width: 100%;">Pack Name</th>
                                     <th>Pack Category</th>
-                                    <th>Delete Pack</th>
+                                    <th>Download Pack</th>
                                 </tr>
-                                <c:forEach var="pack" items="${allUserPacks}" varStatus="status">
+                                <c:forEach var="pack" items="${allPublicPacks}" varStatus="status">
                                     <tr>
                                         <td><c:out value="${status.count}" /></td>
                                         <td>
@@ -125,9 +104,9 @@
                                         <td>${pack.value.packCategoryName}</td>
                                         <td>
                                             <form action="Pack" method="post">
-                                                <input type="hidden" name="action" value="deletePack">
+                                                <input type="hidden" name="action" value="downloadPack">
                                                 <input type="hidden" name="packID" value="${pack.value.packID}">
-                                                <input type="submit" value="Delete" class="btn btn-sm btn-danger">
+                                                <input type="submit" value="Download">
                                             </form>
                                         </td>
                                     </tr>
@@ -136,49 +115,10 @@
                         </c:if>
                     </div>
                     <div class="col-6">
-                        <form action="PackCategory" method="post">
-                            <h1>Add Pack Category</h1>
-                            <input type="hidden" name="action" value="addPackCategory">
-                            <div class="columnFlex">
-                                <label for="newPackCategoryName">Pack Category Name</label>
-                                <input type="text" name="newPackCategoryName" required><br>
-                            </div>
-                            <input type="submit" value="Submit" id="submit">
-                        </form>
-                        <br>
-                        <table>
-                            <tr>
-                                <th>#</th>
-                                <th style="width: 100%;">Category</th>
-                                <th>Delete Category</th>
-                            </tr>
-                            <c:forEach var="packCategory" items="${packCategoryList}" varStatus="status">
-                                <tr>
-                                    <td><c:out value="${status.count}" /></td>
-                                    <td>
-                                        <form id="editForm" action="PackCategory" method="post">
-                                            <input type="hidden" name="action" value="editPackCategory">
-                                            <input type="hidden" name="packCategoryID" value="<c:out value='${packCategory.key}' />">
-                                            <div class="rowFlex">
-                                                <input type="text" id="packCategoryName" name="editedPackCategoryName" value="<c:out value="${packCategory.value.packCategoryName}" />">
-                                                <input type="submit" value="Edit">
-                                            </div>
-                                        </form>
-                                    </td>
-                                    <td>
-                                        <form action="PackCategory" method="post">
-                                            <input type="hidden" name="action" value="deletePackCategory">
-                                            <input type="hidden" name="key" value="<c:out value='${packCategory.key}' />">
-                                            <input type="submit" value="Delete" class="btn btn-sm btn-danger">
-                                        </form>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                        </table>
+                        <h1>Filter Options</h1>
                     </div>
                 </div>
             </div>
         </div>
-        <script src="styles/js-bootstrap/bootstrap.js"></script>
     </body>
 </html>

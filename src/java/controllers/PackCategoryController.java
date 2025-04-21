@@ -105,7 +105,7 @@ public class PackCategoryController extends HttpServlet {
 
             case "editPackCategory" -> {
                 int packCategoryID = Integer.parseInt(request.getParameter("packCategoryID"));
-                String packCategoryName = request.getParameter("updatedPackCategoryName");
+                String packCategoryName = request.getParameter("editedPackCategoryName");
 
                 PackCategory packCategory = new PackCategory();
 

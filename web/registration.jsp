@@ -10,10 +10,10 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Registration for Expense Tracker</title>
         <link rel="stylesheet" href="styles/main.css" type="text/css"/>
         <link rel="stylesheet" href="styles/css-bootstrap/bootstrap.css">
-        <title>Registration for Expense Tracker</title>
-        
     </head>
     <body class="bg-primary">
         <div class="col">

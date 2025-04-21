@@ -16,6 +16,8 @@ public class Pack implements Serializable {
     private int packID;
     private String packName;
     private int packCategoryID;
+    private String packCategoryName;
+    private boolean isPublic;
     private int packHighScore;
     private String packHighScoreTime;
     private LocalDate createdDate;
@@ -24,15 +26,19 @@ public class Pack implements Serializable {
     public Pack() {
     }
 
-    public Pack(int packID, String packName, int packCategoryID, int packHighScore, String packHighScoreTime, LocalDate createdDate, User user) {
+    public Pack(int packID, String packName, int packCategoryID, String packCategoryName, boolean isPublic, int packHighScore, String packHighScoreTime, LocalDate createdDate, User user) {
         this.packID = packID;
         this.packName = packName;
         this.packCategoryID = packCategoryID;
+        this.packCategoryName = packCategoryName;
+        this.isPublic = isPublic;
         this.packHighScore = packHighScore;
         this.packHighScoreTime = packHighScoreTime;
         this.createdDate = createdDate;
         this.user = user;
     }
+
+    
 
     public int getPackID() {
         return packID;
@@ -88,6 +94,22 @@ public class Pack implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getPackCategoryName() {
+        return packCategoryName;
+    }
+
+    public void setPackCategoryName(String packCategoryName) {
+        this.packCategoryName = packCategoryName;
+    }
+
+    public boolean isIsPublic() {
+        return isPublic;
+    }
+
+    public void setIsPublic(boolean isPublic) {
+        this.isPublic = isPublic;
     }
     
     
