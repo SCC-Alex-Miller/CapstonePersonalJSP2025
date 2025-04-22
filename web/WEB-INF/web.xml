@@ -28,6 +28,10 @@
         <servlet-name>StudySessionController</servlet-name>
         <servlet-class>controllers.StudySessionController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ReportController</servlet-name>
+        <servlet-class>controllers.ReportController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Controller</servlet-name>
         <url-pattern>/Controller</url-pattern>
@@ -55,6 +59,10 @@
     <servlet-mapping>
         <servlet-name>StudySessionController</servlet-name>
         <url-pattern>/StudySession</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReportController</servlet-name>
+        <url-pattern>/Report</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

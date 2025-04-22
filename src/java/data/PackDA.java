@@ -91,6 +91,7 @@ public class PackDA {
             packs.setPackCategoryID(rs.getInt("fkPackCategoryID"));
             packs.setIsPublic(rs.getBoolean("isPublic"));
             user.setUserID(rs.getInt("fkUserID"));
+            user = UserDA.getUserFromUserID(user.getUserID());
             packs.setUser(user);
             packs.setCreatedDate(rs.getDate("createdDate").toLocalDate());
             

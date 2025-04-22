@@ -65,7 +65,7 @@
                             <table>               
                                 <tr>
                                     <th>#</th>
-                                    <th>Study</th>
+                                    <th>Username</th>
                                     <th>View</th>
                                     <th style="width: 100%;">Pack Name</th>
                                     <th>Pack Category</th>
@@ -75,12 +75,30 @@
                                     <tr>
                                         <td><c:out value="${status.count}" /></td>
                                         <td>
-                                            <form action="Pack" method="post">
-                                                <input type="hidden" name="action" value="studyPack">
-                                                <input type="hidden" name="packID" value="<c:out value='${pack.key}' />">
-                                                <input type="hidden" name="packName" value="<c:out value='${pack.value.packName}' />">
-                                                <input type="submit" value="Study">
-                                            </form>
+                                            <c:choose>
+                                                <c:when test="${comment.value.fkUserID ne loggedInUser.userID}">
+                                                    <div class="dropdown show">
+                                                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            ${pack.value.user.username}
+                                                        </a>
+
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                            <form action="Report" method="post" class="m-0 p-0">
+                                                                <input type="hidden" name="action" value="goToReportPage">
+                                                                <input type="hidden" name="reportedUsername" value="${pack.value.user.username}">
+                                                                <input type="submit" id="reportUser" class="dropdown-item" value="Report User">
+                                                            </form>
+                                                            <form action="Admin" method="post" class="m-0 p-0">
+                                                                <input type="hidden" name="action" value="banUser">
+                                                                <input type="submit" id="banUser" class="dropdown-item" value="Ban User">
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    ${pack.value.user.username}
+                                                </c:otherwise>
+                                            </c:choose>
                                         </td>
                                         <td>
                                             <form action="Pack" method="post">
@@ -120,5 +138,9 @@
                 </div>
             </div>
         </div>
+        <!-- jQuery, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     </body>
 </html>
