@@ -76,7 +76,7 @@
                                         <td><c:out value="${status.count}" /></td>
                                         <td>
                                             <c:choose>
-                                                <c:when test="${comment.value.fkUserID ne loggedInUser.userID}">
+                                                <c:when test="${pack.value.user.userID ne loggedInUser.userID}">
                                                     <div class="dropdown show">
                                                         <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                             ${pack.value.user.username}
