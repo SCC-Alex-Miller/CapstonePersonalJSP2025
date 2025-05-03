@@ -8,10 +8,6 @@
 <%@page import="business.StudySession"%>
 <%
     StudySession studySession = (StudySession) request.getAttribute("studySession");
-    if (studySession == null) {
-        response.sendRedirect("dashboard.jsp");
-        return;
-    }
 
     int correctCount = studySession.getSessionRight();
     int wrongCount = studySession.getSessionWrong();
@@ -34,7 +30,6 @@
                     <p class="fs-4">Total Cards: <strong><%= totalCount %></strong></p>
                     <p class="fs-4 text-success">Correct Answers: <strong><%= correctCount %></strong></p>
                     <p class="fs-4 text-danger">Wrong Answers: <strong><%= wrongCount %></strong></p>
-                    <a href="dashboard.jsp" class="btn btn-primary mt-4">Return to Dashboard</a>
                 </div>
             </div>
         </div>
