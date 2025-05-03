@@ -146,17 +146,49 @@ public class PackDA {
         return pack;
     }
     
-    public static boolean doesPackNameExists(String packName) throws NamingException, SQLException {
+    public static Pack selectPack(int fkUserID, String packName) throws NamingException, SQLException {
+     
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps;
+        ResultSet rs;
+
+        String query = "SELECT * FROM pack "
+                + "WHERE fkUserID = ? AND packName = ?";
+
+        ps = connection.prepareStatement(query);
+        ps.setInt(1, fkUserID);
+        ps.setString(2, packName);
+        rs = ps.executeQuery();
+        
+        Pack pack = new Pack();
+        User user = new User();
+        
+        if (rs.next()) {
+            pack.setPackID(rs.getInt("packID"));
+            pack.setPackName(rs.getString("packName"));
+            pack.setPackCategoryID(rs.getInt("fkPackCategoryID"));
+            pack.setIsPublic(rs.getBoolean("isPublic"));
+            user.setUserID(rs.getInt("fkUserID"));
+            pack.setUser(user);
+            pack.setCreatedDate(rs.getDate("createdDate").toLocalDate());
+        }
+        
+        return pack;
+    }
+    
+    public static boolean doesPackNameExists(String packName, int fkUserID) throws NamingException, SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps;
         ResultSet rs;
 
         String query = "SELECT packName FROM pack "
-                + "WHERE packName = ?";
+                + "WHERE packName = ? AND fkUserID = ?";
 
         ps = connection.prepareStatement(query);
         ps.setString(1, packName);
+        ps.setInt(2, fkUserID);
         rs = ps.executeQuery();
 
         boolean b = rs.next();
@@ -211,5 +243,22 @@ public class PackDA {
         return rows;
     }
     
-    
+    public static int editPack(Pack pack) throws NamingException, SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps;
+
+        String query = "UPDATE pack SET packName = ?, isPublic = ?, fkPackCategoryID = ? WHERE packID = ?;";
+
+        ps = connection.prepareStatement(query);
+        ps.setString(1, pack.getPackName());
+        ps.setBoolean(2, pack.isIsPublic());
+        ps.setInt(3, pack.getPackCategoryID());
+        ps.setInt(4, pack.getPackID());
+
+        int rows = ps.executeUpdate();
+        ps.close();
+        pool.freeConnection(connection);
+        return rows;
+    }
 }

@@ -79,7 +79,7 @@ public class PackCategoryController extends HttpServlet {
                 packCategory.setPackCategoryCreatedDate(createdDate);
 
                 try {
-                    if (!packCategory.getPackCategoryName().equals(PackCategoryDA.doesPackCategoryNameExists(packCategoryName))) {
+                    if (PackCategoryDA.doesPackCategoryNameExists(packCategoryName, loggedInUser.getUserID()) == false) {
                         PackCategoryDA.addPackCategory(packCategory, packCategory.getFkUserID());
                         message = "Pack Category created successfully.";
 
@@ -113,7 +113,7 @@ public class PackCategoryController extends HttpServlet {
                 packCategory.setPackCategoryName(packCategoryName);
 
                 try {
-                    if (!packCategory.getPackCategoryName().equals(PackCategoryDA.doesPackCategoryNameExists(packCategoryName))) {
+                    if (PackCategoryDA.doesPackCategoryNameExists(packCategoryName, loggedInUser.getUserID()) == false) {
                         PackCategoryDA.editPackCategory(packCategory);
                         message = "Pack Category Updated.";
                     } else {

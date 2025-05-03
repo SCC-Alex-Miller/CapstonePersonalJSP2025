@@ -49,6 +49,8 @@
                             </select><br><br>
                             <label>Notes: </label>
                             <textarea class="form-control" id="reportUserNotes" name="reportUserNotes" rows="4" cols="50"></textarea><br><br>
+                            <input type="hidden" name="reportedUserID" value="${reportedUserID}">
+                            <input type="hidden" name="reportedPackID" value="${reportedPackID}">
                             <input type="submit" value="Report">
                         </form>
                     </div>

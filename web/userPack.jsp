@@ -89,7 +89,9 @@
                                     <th>Study</th>
                                     <th>View</th>
                                     <th style="width: 100%;">Pack Name</th>
+                                    <th>Public?</th>
                                     <th>Pack Category</th>
+                                    <th></th>
                                     <th>Delete Pack</th>
                                 </tr>
                                 <c:forEach var="pack" items="${allUserPacks}" varStatus="status">
@@ -111,25 +113,37 @@
                                                 <input type="submit" value="View">
                                             </form>
                                         </td>
+                                    <form id="editForm" action="Pack" method="post">
                                         <td>
-                                            <form id="editForm" action="Pack" method="post">
-                                                <input type="hidden" name="action" value="editPack">
-                                                <input type="hidden" name="packID" value="<c:out value='${pack.key}' />">
-                                                <input type="hidden" name="userID" value="<c:out value='${pack.value.user.userID}' />">
-                                                <div class="rowFlex">
-                                                    <input type="text" id="packText" name="updatedPackName" value="<c:out value="${pack.value.packName}" />">
-                                                    <input type="submit" value="Edit">
-                                                </div>
-                                            </form>
+                                            <input type="hidden" name="action" value="editPack">
+                                            <input type="hidden" name="packID" value="<c:out value='${pack.key}' />">
+                                            <input type="hidden" name="userID" value="<c:out value='${pack.value.user.userID}' />">
+                                            <input type="text" id="packText" name="updatedPackName" value="<c:out value="${pack.value.packName}" />">
                                         </td>
-                                        <td>${pack.value.packCategoryName}</td>
                                         <td>
-                                            <form action="Pack" method="post">
-                                                <input type="hidden" name="action" value="deletePack">
-                                                <input type="hidden" name="packID" value="${pack.value.packID}">
-                                                <input type="submit" value="Delete" class="btn btn-sm btn-danger">
-                                            </form>
+                                            <input type="checkbox" id="isPublic" name="isPublic" <c:if test="${pack.value.isPublic}">checked</c:if> >
+                                            </td>
+                                            <td>
+                                                <select name="newPackCategoryID" required>
+                                                <c:forEach var="category" items="${packCategoryList}">
+                                                    <option value="${category.value.packCategoryID}"
+                                                            <c:if test="${category.value.packCategoryID == pack.value.packCategoryID}">selected</c:if>>
+                                                        ${category.value.packCategoryName}
+                                                    </option>
+                                                </c:forEach>
+                                            </select>
                                         </td>
+                                        <td>
+                                            <input type="submit" value="Edit">
+                                        </td>
+                                    </form>
+                                    <td>
+                                        <form action="Pack" method="post">
+                                            <input type="hidden" name="action" value="deletePack">
+                                            <input type="hidden" name="packID" value="${pack.value.packID}">
+                                            <input type="submit" value="Delete" class="btn btn-sm btn-danger">
+                                        </form>
+                                    </td>
                                     </tr>
                                 </c:forEach>
                             </table>

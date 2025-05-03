@@ -76,17 +76,18 @@ public class PackCategoryDA {
         return selectedPackCategory;
     }
     
-    public static boolean doesPackCategoryNameExists(String packCategoryName) throws NamingException, SQLException {
+    public static boolean doesPackCategoryNameExists(String packCategoryName, int fkUserID) throws NamingException, SQLException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps;
         ResultSet rs;
 
         String query = "SELECT packCategoryName FROM packcategory "
-                + "WHERE packCategoryName = ?";
+                + "WHERE packCategoryName = ? AND fkUserID = ? ";
 
         ps = connection.prepareStatement(query);
         ps.setString(1, packCategoryName);
+        ps.setInt(2, fkUserID);
         rs = ps.executeQuery();
 
         boolean b = rs.next();
@@ -151,4 +152,6 @@ public class PackCategoryDA {
         pool.freeConnection(connection);
         return rows;
     }
+    
+    
 }

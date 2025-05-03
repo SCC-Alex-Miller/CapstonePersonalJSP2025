@@ -33,55 +33,60 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Study Session</title>
         <link rel="stylesheet" href="styles/css-bootstrap/bootstrap.css">
         <link rel="stylesheet" href="styles/main.css">
     </head>
     <body class="bg-primary">
         <div class="col">
-            <nav>    
-                <%@include file="nav.jsp" %>
-            </nav>
+            <%@include file="nav.jsp" %>
         </div>
-        <div class="container bg-light border rounded-3 shadow-lg py-5 my-5 text-center">
-            <h1 class="mb-4">Study Session</h1>
-            <h4 id="timer">Time: 0s</h4>
+        <div class="container bg-primary-subtle border rounded-3 shadow-lg py-5 my-5">
+            <div class="row justify-content-center">
+                <div class="row justify-content-center">
+                    <div class="col-6 text-center">
+                        <h1 class="mb-4">Study Session</h1>
+                        <h4 id="timer">Time: 0s</h4>
 
-            <div class="card-container mt-4 mb-4">
-                <!-- Wrapper to hold the flip functionality -->
-                <div class="flip-card" id="flipCard" onclick="flipCard()">
-                    <div class="flip-card-inner">
-                        <!-- Front of the card -->
-                        <div class="flip-card-front d-flex align-items-center justify-content-center text-center" id="cardFront">
-                            <div id="cardFrontContent"></div>
+                        <div class="card-container mt-4 mb-4">
+                            <!-- Wrapper to hold the flip functionality -->
+                            <div class="flip-card" id="flipCard" onclick="flipCard()">
+                                <div class="flip-card-inner">
+                                    <!-- Front of the card -->
+                                    <div class="flip-card-front d-flex align-items-center justify-content-center text-center" id="cardFront">
+                                        <div id="cardFrontContent"></div>
+                                    </div>
+
+                                    <!-- Back of the card -->
+                                    <div class="flip-card-back d-flex align-items-center justify-content-center text-center" id="cardBack">
+                                        <div id="cardBackContent"></div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
 
-                        <!-- Back of the card -->
-                        <div class="flip-card-back d-flex align-items-center justify-content-center text-center" id="cardBack">
-                            <div id="cardBackContent"></div>
+
+                        <div id="cardControls" class="d-none">
+
+                            <div id="answerButtons" class="d-none">
+                                <form method="post" action="StudySessionController" class="d-inline">
+                                    <input type="hidden" name="action" value="markCard">
+                                    <input type="hidden" id="markResult" name="result">
+                                    <button type="button" class="btn btn-success" onclick="markCard('right')">Right</button>
+                                    <button type="button" class="btn btn-danger" onclick="markCard('wrong')">Wrong</button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div id="sessionComplete" class="d-none mt-4">
+                            <h3>Study Session Complete!</h3>
+                            <a href="dashboard.jsp" class="btn btn-primary">View Results</a>
                         </div>
                     </div>
                 </div>
-
-            </div>
-
-
-            <div id="cardControls" class="d-none">
-
-                <div id="answerButtons" class="d-none">
-                    <form method="post" action="StudySessionController" class="d-inline">
-                        <input type="hidden" name="action" value="markCard">
-                        <input type="hidden" id="markResult" name="result">
-                        <button type="button" class="btn btn-success" onclick="markCard('right')">Right</button>
-                        <button type="button" class="btn btn-danger" onclick="markCard('wrong')">Wrong</button>
-                    </form>
-                </div>
-            </div>
-
-            <div id="sessionComplete" class="d-none mt-4">
-                <h3>Study Session Complete!</h3>
-                <a href="dashboard.jsp" class="btn btn-primary">View Results</a>
             </div>
         </div>
 

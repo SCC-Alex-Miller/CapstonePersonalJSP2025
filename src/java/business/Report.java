@@ -19,11 +19,12 @@ public class Report implements Serializable {
     private String reportAdminNotes;
     private int reportCreatedByID;
     private int reportedUserID;
+    private int reportedPackID;
 
     public Report() {
     }
 
-    public Report(int reportID, String reportType, boolean reportActive, String reportUserNotes, String reportAdminNotes, int reportCreatedByID, int reportedUserID) {
+    public Report(int reportID, String reportType, boolean reportActive, String reportUserNotes, String reportAdminNotes, int reportCreatedByID, int reportedUserID, int reportedPackID) {
         this.reportID = reportID;
         this.reportType = reportType;
         this.reportActive = reportActive;
@@ -31,6 +32,7 @@ public class Report implements Serializable {
         this.reportAdminNotes = reportAdminNotes;
         this.reportCreatedByID = reportCreatedByID;
         this.reportedUserID = reportedUserID;
+        this.reportedPackID = reportedPackID;
     }
 
     public int getReportID() {
@@ -87,6 +89,14 @@ public class Report implements Serializable {
 
     public void setReportedUserID(int reportedUserID) {
         this.reportedUserID = reportedUserID;
+    }
+
+    public int getReportedPackID() {
+        return reportedPackID;
+    }
+
+    public void setReportedPackID(int reportedPackID) {
+        this.reportedPackID = reportedPackID;
     }
     
     

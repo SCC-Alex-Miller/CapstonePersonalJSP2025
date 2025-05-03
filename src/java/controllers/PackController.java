@@ -6,8 +6,10 @@ package controllers;
 
 import business.Card;
 import business.Pack;
+import business.PackCategory;
 import business.User;
 import data.CardDA;
+import data.PackCategoryDA;
 import data.PackDA;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -61,16 +63,152 @@ public class PackController extends HttpServlet {
             case "userPackPage" -> {
                 break;
             }
-            
+
             case "publicPackPage" -> {
-                
+
                 url = "/publicPack.jsp";
                 break;
             }
-            
+
+            case "editPack" -> {
+                int packID = Integer.parseInt(request.getParameter("packID"));
+                boolean isPublic = false;
+                String packName = request.getParameter("updatedPackName");
+                int packCategoryID = Integer.parseInt(request.getParameter("newPackCategoryID"));
+                if (request.getParameter("isPublic") != null) {
+                    isPublic = true;
+                }
+
+                Pack pack = new Pack();
+
+                pack.setPackID(packID);
+                pack.setPackName(packName);
+                pack.setIsPublic(isPublic);
+                pack.setPackCategoryID(packCategoryID);
+
+                Pack originalPack = new Pack();
+
+                try {
+                    boolean packNameExists = PackDA.doesPackNameExists(packName, loggedInUser.getUserID());
+                    if (!packNameExists) {
+                        PackDA.editPack(pack);
+                        message = "Pack edited successfully.";
+                    } else {
+                        originalPack = PackDA.selectPack(packID);
+                        if (originalPack.getPackName().equals(pack.getPackName())) {
+                            PackDA.editPack(pack);
+                            message = "Pack edited successfully.";
+                        } else {
+                            message = "packName already exists.";
+                            errors.put("packName", "already exists");
+                        }
+                    }
+                } catch (NamingException | SQLException e) {
+                    LOG.log(Level.SEVERE, url, e);
+                    message = "Unable to edit pack.";
+                }
+
+                url = "/userPack.jsp";
+                break;
+            }
+
             case "downloadPack" -> {
-                
-                url = "/publicPack.jsp";
+                int packID = Integer.parseInt(request.getParameter("packID"));
+
+                //Grab the pack
+                Pack pack = new Pack();
+
+                try {
+                    pack = PackDA.selectPack(packID);
+                } catch (NamingException | SQLException e) {
+                    LOG.log(Level.SEVERE, url, e);
+                    message = "Unable to locate pack.";
+                }
+
+                //Grab the PackCategory
+                PackCategory category = new PackCategory();
+
+                try {
+                    category = PackCategoryDA.selectPackCategory(pack.getPackCategoryID());
+                } catch (NamingException | SQLException e) {
+                    LOG.log(Level.SEVERE, url, e);
+                    message = "Unable to get PackCategory.";
+                }
+
+                category.setFkUserID(loggedInUser.getUserID());
+
+                //Add the PackCategory
+                try {
+                    if (PackCategoryDA.doesPackCategoryNameExists(category.getPackCategoryName(), loggedInUser.getUserID()) == false) {
+                        PackCategoryDA.addPackCategory(category, loggedInUser.getUserID());
+                        message = "Pack Category created successfully.";
+
+                    } else {
+                        message = "Pack Category Name already exists.";
+                        errors.put("Pack Category Name", "already exists");
+                    }
+                } catch (NamingException | SQLException e) {
+                    LOG.log(Level.SEVERE, url, e);
+                    message = "Naming & SQL error. Check DB.";
+                }
+
+                //Add the Pack
+                pack.setUser(loggedInUser);
+                pack.setPackHighScore(0);
+                pack.setPackHighScoreTime("00:00:00");
+
+                String packName = pack.getPackName();
+
+                Boolean makeCards = false;
+
+                try {
+                    boolean packNameExists = PackDA.doesPackNameExists(packName, loggedInUser.getUserID());
+                    if (!packNameExists) {
+                        PackDA.addPack(pack);
+                        message = "Pack created successfully.";
+                        makeCards = true;
+                    } else {
+                        message = "packName already exists.";
+                        errors.put("packName", "already exists");
+                    }
+                } catch (NamingException | SQLException e) {
+                    LOG.log(Level.SEVERE, url, e);
+                    message = "Unable to add pack.";
+                }
+
+                //Get cards for pack
+                LinkedHashMap<Integer, Card> packCards = new LinkedHashMap();
+
+                try {
+                    packCards = CardDA.selectPackCards(pack.getPackID());
+                } catch (NamingException | SQLException e) {
+                    LOG.log(Level.SEVERE, url, e);
+                    message = "Unable to get cards.";
+                }
+
+                //Get PackID for the pack you just added
+                Pack newPack = new Pack();
+                try {
+                    newPack = PackDA.selectPack(loggedInUser.getUserID(), packName);
+                } catch (NamingException | SQLException e) {
+                    LOG.log(Level.SEVERE, url, e);
+                    message = "Unable to get packID.";
+                }
+
+                //Add Cards to pack
+                if (makeCards == true) {
+                    try {
+                        for (Card card : packCards.values()) {
+                            card.setFkPackID(newPack.getPackID());
+                            CardDA.addCard(card);
+                        }
+                    } catch (NamingException | SQLException e) {
+                        LOG.log(Level.SEVERE, url, e);
+                        message = "Unable to get cards.";
+                    }
+                }
+
+                url = "/userPack.jsp";
                 break;
             }
 
@@ -89,7 +227,7 @@ public class PackController extends HttpServlet {
                 pack.setCreatedDate(currentDateTime);
 
                 try {
-                    boolean alreadyCreated = PackDA.doesPackNameExists(packName);
+                    boolean alreadyCreated = PackDA.doesPackNameExists(packName, loggedInUser.getUserID());
 
                     if (!alreadyCreated) {
                         PackDA.addPack(pack);
@@ -154,7 +292,7 @@ public class PackController extends HttpServlet {
                 } catch (NamingException | SQLException ex) {
                     errors.put("pack", "Trouble deleting pack");
                 }
-                
+
                 url = "/userPack.jsp";
                 break;
             }

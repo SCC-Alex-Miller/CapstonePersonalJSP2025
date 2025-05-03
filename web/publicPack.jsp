@@ -86,6 +86,8 @@
                                                             <form action="Report" method="post" class="m-0 p-0">
                                                                 <input type="hidden" name="action" value="goToReportPage">
                                                                 <input type="hidden" name="reportedUsername" value="${pack.value.user.username}">
+                                                                <input type="hidden" name="reportedUserID" value="${pack.value.user.userID}">
+                                                                <input type="hidden" name="reportedPackID" value="${pack.value.packID}">
                                                                 <input type="submit" id="reportUser" class="dropdown-item" value="Report User">
                                                             </form>
                                                             <form action="Admin" method="post" class="m-0 p-0">

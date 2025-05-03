@@ -6,6 +6,7 @@ package controllers;
 
 import business.Report;
 import business.User;
+import data.ReportDA;
 import data.UserDA;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -50,9 +51,42 @@ public class ReportController extends HttpServlet {
             case "goToReportPage" -> {
                 request.setAttribute("loggedInUser", loggedInUser);
                 String reportedUsername = request.getParameter("reportedUsername");
-
+                int reportedUserID = Integer.parseInt(request.getParameter("reportedUserID"));
+                int reportedPackID = Integer.parseInt(request.getParameter("reportedPackID"));
+                
                 request.setAttribute("reportedUsername", reportedUsername);
+                request.setAttribute("reportedUserID", reportedUserID);
+                request.setAttribute("reportedPackID", reportedPackID);
 
+                url = "/reportPage.jsp";
+                break;
+            }
+            
+            case "addReport" -> {
+                request.setAttribute("loggedInUser", loggedInUser);
+                int reportedUserID = Integer.parseInt(request.getParameter("reportedUserID"));
+                int reportedPackID = Integer.parseInt(request.getParameter("reportedPackID"));
+                
+                String reportType = request.getParameter("reportType");
+                String reportUserNotes = request.getParameter("reportUserNotes");
+                int reportCreatedByID = loggedInUser.getUserID();
+                
+                Report report = new Report();
+                
+                report.setReportType(reportType);
+                report.setReportActive(true);
+                report.setReportUserNotes(reportUserNotes);
+                report.setReportCreatedByID(reportCreatedByID);
+                report.setReportedUserID(reportedUserID);
+                report.setReportedPackID(reportedPackID);
+                        
+                try {
+                    ReportDA.addReport(report);
+                } catch (NamingException | SQLException e) {
+                    LOG.log(Level.SEVERE, url, e);
+                    message = "Unable to add report";
+                }
+                
                 url = "/reportPage.jsp";
                 break;
             }
