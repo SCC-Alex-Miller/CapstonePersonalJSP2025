@@ -70,7 +70,7 @@
                                 <input type="hidden" name="rightCount" value="${rightCount}">
                                 <input type="hidden" name="wrongCount" value="${wrongCount}">
                                 <input type="hidden" name="currentIndex" value="${currentIndex}">
-                                <input type="hidden" name="packCards" value="${packCards}">
+                                <input type="hidden" name="packCards" value="${activePack.packID}">
                                 <input type="submit" value="Wrong" class="btn btn-danger" id="wrongButton">
                             </form>
                         </div>

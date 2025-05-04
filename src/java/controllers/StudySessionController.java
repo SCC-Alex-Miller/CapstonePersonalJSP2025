@@ -74,8 +74,12 @@ public class StudySessionController extends HttpServlet {
                 int currentIndex = Integer.parseInt(request.getParameter("currentIndex"));
                 int rightCount = Integer.parseInt(request.getParameter("rightCount"));
                 int wrongCount = Integer.parseInt(request.getParameter("wrongCount"));
-                packCards = request.getParameter("packCards");
-                
+                try {
+                    packCards = CardDA.selectPackCards(activePack.getPackID());
+                } catch (NamingException | SQLException ex) {
+                    errors.put("packCards", "Trouble getting pack cards");
+                }
+
                 if (answer.equalsIgnoreCase("right")) {
                     rightCount += 1;
                 } else {
@@ -84,7 +88,7 @@ public class StudySessionController extends HttpServlet {
 
                 currentIndex++;
 
-                if (currentIndex < cards.size()) {
+                if (currentIndex < packCards.size()) {
                     request.setAttribute("currentIndex", currentIndex);
                     request.setAttribute("rightCount", rightCount);
                     request.setAttribute("wrongCount", wrongCount);
@@ -96,7 +100,7 @@ public class StudySessionController extends HttpServlet {
                     request.setAttribute("rightCount", rightCount);
                     request.setAttribute("wrongCount", wrongCount);
                     request.setAttribute("packCards", packCards);
-                    
+
                 }
 
                 break;
@@ -105,7 +109,7 @@ public class StudySessionController extends HttpServlet {
             default -> {
                 break;
             }
-                
+
         }
 
         getServletContext().getRequestDispatcher(url).forward(request, response);
