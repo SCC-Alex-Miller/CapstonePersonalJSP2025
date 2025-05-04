@@ -63,56 +63,49 @@ public class StudySessionController extends HttpServlet {
         request.setAttribute("packCards", packCards);
 
         switch (action) {
-            case "startSession": {
-                List<Card> cards = new ArrayList<>(packCards.values());
-
-                session.setAttribute("cards", cards);
-                session.setAttribute("currentCardIndex", 0);
-                session.setAttribute("correctCount", 0);
-                session.setAttribute("wrongCount", 0);
-
-                if (!cards.isEmpty()) {
-                    request.setAttribute("currentCard", cards.get(0));
-                    message = "GO!";
-                }
-
-                request.setAttribute("message", message);
-                request.setAttribute("errors", errors);
-                request.getSession().setAttribute("loggedInUser", loggedInUser);
+            case "goToResultsPage" -> {
+                int rightCount = Integer.parseInt(request.getParameter("rightCount"));
+                int wrongCount = Integer.parseInt(request.getParameter("rightCount"));
                 break;
             }
 
-            case "submitAnswer": {
-                String result = request.getParameter("result"); // "right" or "wrong"
-                Integer index = (Integer) session.getAttribute("currentCardIndex");
-                List<Card> cards = (List<Card>) session.getAttribute("cards");
-
-                if ("right".equals(result)) {
-                    session.setAttribute("correctCount", ((int) session.getAttribute("correctCount")) + 1);
-                } else if ("wrong".equals(result)) {
-                    session.setAttribute("wrongCount", ((int) session.getAttribute("wrongCount")) + 1);
+            case "Answer" -> {
+                String answer = request.getParameter("answer");
+                int currentIndex = Integer.parseInt(request.getParameter("currentIndex"));
+                int rightCount = Integer.parseInt(request.getParameter("rightCount"));
+                int wrongCount = Integer.parseInt(request.getParameter("wrongCount"));
+                packCards = request.getParameter("packCards");
+                
+                if (answer.equalsIgnoreCase("right")) {
+                    rightCount += 1;
+                } else {
+                    wrongCount += 1;
                 }
 
-                index++;
-                session.setAttribute("currentCardIndex", index);
+                currentIndex++;
 
-                if (index < cards.size()) {
-                    request.setAttribute("currentCard", cards.get(index));
+                if (currentIndex < cards.size()) {
+                    request.setAttribute("currentIndex", currentIndex);
+                    request.setAttribute("rightCount", rightCount);
+                    request.setAttribute("wrongCount", wrongCount);
+                    request.setAttribute("packCards", packCards);
                 } else {
                     // End session
-                    StudySession studySession = new StudySession();
-                    studySession.setSessionRight((int) session.getAttribute("correctCount"));
-                    studySession.setSessionWrong((int) session.getAttribute("wrongCount"));
-
                     request.setAttribute("sessionComplete", true);
-                    request.setAttribute("studySession", studySession);
+                    request.setAttribute("currentIndex", currentIndex);
+                    request.setAttribute("rightCount", rightCount);
+                    request.setAttribute("wrongCount", wrongCount);
+                    request.setAttribute("packCards", packCards);
+                    
                 }
 
                 break;
             }
 
-            default:
+            default -> {
                 break;
+            }
+                
         }
 
         getServletContext().getRequestDispatcher(url).forward(request, response);

@@ -1,9 +1,3 @@
-<%-- 
-    Document   : studySession
-    Created on : Apr 6, 2025, 2:47:32 PM
-    Author     : lando
---%>
-
 <%@page import="business.Pack"%>
 <%@page import="java.util.LinkedHashMap"%>
 <%@page import="business.Card"%>
@@ -26,8 +20,6 @@
         request.setAttribute("message", message);
         return;
     }
-
-    LinkedHashMap<Integer, Card> packCards = (LinkedHashMap<Integer, Card>) request.getAttribute("packCards");
 %>
 
 <!DOCTYPE html>
@@ -45,34 +37,51 @@
         </div>
         <div class="container bg-primary-subtle border rounded-3 shadow-lg py-5 my-5">
             <div class="row justify-content-center">
-                <div class="row justify-content-center">
-                    <div class="col-6 text-center">
-                        <h1 class="mb-4">Study Session</h1>
+                <div class="col-6 text-center">
+                    <h1 class="mb-4">Study Session</h1>
 
-                        <div class="card-container mt-4 mb-4">
-                            <div class="flip-card" id="flipCard">
-                                <div class="flip-card-inner">
-                                    <div class="flip-card-front d-flex align-items-center justify-content-center text-center" id="cardFront">
-                                        <div id="cardFrontContent"></div>
-                                    </div>
-                                    <div class="flip-card-back d-flex align-items-center justify-content-center text-center" id="cardBack">
-                                        <div id="cardBackContent"></div>
-                                    </div>
+                    <div class="card-container mt-4 mb-4">
+                        <div class="flip-card" id="flipCard">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front d-flex align-items-center justify-content-center text-center" id="cardFront">
+                                    <div id="cardFrontContent"></div>
+                                </div>
+                                <div class="flip-card-back d-flex align-items-center justify-content-center text-center" id="cardBack">
+                                    <div id="cardBackContent"></div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div id="cardControls">
-                            <div id="answerButtons" class="d-none">
-                                <button type="button" class="btn btn-success" onclick="markCard('right')">Right</button>
-                                <button type="button" class="btn btn-danger" onclick="markCard('wrong')">Wrong</button>
-                            </div>
+                    <div id="cardControls">
+                        <div id="answerButtons" class="d-none">
+                            <form action="StudySession" method="post">
+                                <input type="hidden" name="action" value="Answer">
+                                <input type="hidden" name="answer" value="right">
+                                <input type="hidden" name="rightCount" value="${rightCount}">
+                                <input type="hidden" name="wrongCount" value="${wrongCount}">
+                                <input type="hidden" name="currentIndex" value="${currentIndex}">
+                                <input type="hidden" name="packCards" value="${packCards}">
+                                <input type="submit" value="Right" class="btn btn-success" id="rightButton">
+                            </form>
+                            <form action="StudySession" method="post">
+                                <input type="hidden" name="action" value="Answer">
+                                <input type="hidden" name="answer" value="wrong">
+                                <input type="hidden" name="rightCount" value="${rightCount}">
+                                <input type="hidden" name="wrongCount" value="${wrongCount}">
+                                <input type="hidden" name="currentIndex" value="${currentIndex}">
+                                <input type="hidden" name="packCards" value="${packCards}">
+                                <input type="submit" value="Wrong" class="btn btn-danger" id="wrongButton">
+                            </form>
                         </div>
+                    </div>
 
-                        <div id="sessionComplete" class="d-none mt-4">
-                            <h3>Study Session Complete!</h3>
-                            <a href="results.jsp" class="btn btn-primary">View Results</a>
-                        </div>
+                    <div id="sessionComplete" class="d-none mt-4">
+                        <h3>Study Session Complete!</h3>
+                        <form action="StudySession" method="post">
+                            <input type="hidden" name="action" value="goToResultsPage">
+                            <input type="submit" value="View Results" id="submit" class="btn btn-primary">
+                        </form>
                     </div>
                 </div>
             </div>
@@ -83,30 +92,33 @@
             <c:forEach var="entry" items="${packCards}" varStatus="status">
             {
                 id: ${entry.key},
-                question: `${fn:escapeXml(entry.value.cardQuestion)}`,
-                answer: `${fn:escapeXml(entry.value.cardAnswer)}`
+                        question: `${fn:escapeXml(entry.value.cardQuestion)}`,
+                        answer: `${fn:escapeXml(entry.value.cardAnswer)}`
             }<c:if test="${!status.last}">,</c:if>
             </c:forEach>
             ];
 
-            let currentIndex = 0;
+            let currentIndex = parseInt(${currentIndex});
             let flipped = false;
 
             function showCard(index) {
                 const card = packCards[index];
+                const cardFrontContent = document.getElementById("cardFrontContent");
+                const cardBackContent = document.getElementById("cardBackContent");
+                const answerButtons = document.getElementById("answerButtons");
 
                 if (!flipped) {
-                    document.getElementById("cardFrontContent").textContent = card.question;
-                    document.getElementById("cardBackContent").textContent = "";
+                    cardFrontContent.textContent = card.question;
+                    cardBackContent.textContent = "";
+                    answerButtons.classList.add("d-none");
                 } else {
-                    document.getElementById("cardFrontContent").textContent = "";
-                    document.getElementById("cardBackContent").textContent = card.answer;
+                    cardFrontContent.textContent = "";
+                    cardBackContent.textContent = card.answer;
+                    answerButtons.classList.remove("d-none");
                 }
 
                 document.getElementById("flipCard").classList.toggle("flipped", flipped);
                 document.getElementById("flipCard").onclick = flipCard;
-
-                document.getElementById("answerButtons").classList.toggle("d-none", !flipped);
             }
 
             function flipCard() {
@@ -114,26 +126,9 @@
                 showCard(currentIndex);
             }
 
-            function markCard(result) {
-                fetch("StudySessionController", {
-                    method: "POST",
-                    headers: {"Content-Type": "application/x-www-form-urlencoded"},
-                    body: `action=submitAnswer&result=${result}`
-                }).then(() => {
-                    currentIndex++;
-                    flipped = false;
-
-                    if (currentIndex < packCards.length) {
-                        showCard(currentIndex);
-                    } else {
-                        document.getElementById("cardControls").classList.add("d-none");
-                        document.getElementById("sessionComplete").classList.remove("d-none");
-                    }
-                });
-            }
-
             if (packCards.length > 0) {
-                showCard(0);
+                currentIndex = 0;
+                showCard(currentIndex);
             } else {
                 document.querySelector(".container").innerHTML = "<h2>No cards in this pack.</h2>";
             }

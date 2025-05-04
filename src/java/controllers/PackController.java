@@ -279,6 +279,9 @@ public class PackController extends HttpServlet {
                     errors.put("packCards", "Trouble getting pack cards for study");
                 }
 
+                request.setAttribute("rightCount", 0);
+                request.setAttribute("wrongCount", 0);
+                request.setAttribute("currentIndex", 0);
                 request.setAttribute("packCards", packCards);
                 url = "/studySession.jsp";
                 break;
