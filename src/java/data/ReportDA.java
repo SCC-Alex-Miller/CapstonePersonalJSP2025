@@ -5,6 +5,7 @@
 package data;
 
 import business.Report;
+import business.User;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -41,5 +42,68 @@ public class ReportDA {
         pool.freeConnection(connection);
         return rows;
 
+    }
+    
+    public static LinkedHashMap<Integer, Report> seeAllActiveReports(boolean reportActive) throws NamingException, SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps;
+        ResultSet rs;
+
+        String query = "SELECT * FROM report "
+                + "WHERE reportActive = ?";
+
+        ps = connection.prepareStatement(query);
+        ps.setBoolean(1, reportActive);
+        rs = ps.executeQuery();
+
+        LinkedHashMap<Integer, Report> allActiveReports = new LinkedHashMap();
+        while (rs.next()) {
+            Report report = new Report();
+            User reportedUser = new User();
+            User createdUser = new User();
+            
+            report.setReportID(rs.getInt("reportID"));
+            report.setReportType(rs.getString("reportType"));
+            report.setReportActive(rs.getBoolean("reportActive"));
+            report.setReportUserNotes(rs.getString("reportUserNotes"));
+            report.setReportAdminNotes(rs.getString("reportAdminNotes"));
+            report.setReportCreatedByID(rs.getInt("reportCreatedByID"));
+            report.setReportedUserID(rs.getInt("reportedUserID"));
+            report.setReportedPackID(rs.getInt("reportedPackID"));
+
+            reportedUser = UserDA.getUserFromUserID(report.getReportedUserID());
+            createdUser = UserDA.getUserFromUserID(report.getReportCreatedByID());
+            
+            report.setReportedUsername(reportedUser.getUsername());
+            report.setReportCreatedUsername(createdUser.getUsername());
+            
+            allActiveReports.put(report.getReportID(), report);
+        }
+
+        rs.close();
+        ps.close();
+        pool.freeConnection(connection);
+
+        return allActiveReports;
+
+    }
+    
+    public static int editReport(int reportID, String adminNotes, Boolean reportActive) throws NamingException, SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps;
+
+        String query = "UPDATE report SET reportAdminNotes = ?, reportActive = ? WHERE reportID = ?;";
+
+        ps = connection.prepareStatement(query);
+        ps.setString(1, adminNotes);
+        ps.setBoolean(2, reportActive);
+        ps.setInt(3, reportID);
+
+        int rows = ps.executeUpdate();
+        ps.close();
+        pool.freeConnection(connection);
+        return rows;
     }
 }

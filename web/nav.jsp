@@ -19,9 +19,16 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="Pack?action=publicPackPage">Public Packs</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="Public?action=logout">Log Out</a>
-                    </li>
+                    <c:if test="${loggedInUser.isAdmin == true}">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="Report?action=goToActiveReports">Active Reports</a>
+                        </li>
+                    </c:if>
+                    <div class="position-absolute top-0 end-0 p-2">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="Public?action=logout">Log Out</a>
+                        </li>
+                    </div>
                 </c:if>
                 <c:if test="${loggedInUser == null}">
                     <li class="nav-item">

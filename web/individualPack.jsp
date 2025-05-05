@@ -32,18 +32,6 @@
         return;
     }
 
-    //Setup all Users before page render
-    Pack pack = new Pack();
-    pack.setUser(loggedInUser);
-    String error = "";
-
-    try {
-        LinkedHashMap<Integer, Card> packCards = CardDA.selectPackCards(activePack.getPackID());
-        request.setAttribute("packCards", packCards);
-
-    } catch (NamingException | SQLException e) {
-        error = "Issue populating cards for Pack.";
-    }
 
 %>
 <!DOCTYPE html>
@@ -68,7 +56,6 @@
                         <h3><c:out value= "${message}"/></h3>
                         <h3><c:out value= "${error}"/></h3>
 
-                        <!-- USE A TABLE AND LIST FOR YOU TO SELECT EACH CREATED ACCOUNT -->
                         <c:if test="${!packCards.isEmpty()}">
                             <h1>Card List</h1>
 
@@ -76,7 +63,11 @@
                                 <tr>
                                     <th>#</th>
                                     <th style="width: 100%;">Card</th>
-                                    <th>Delete</th>
+                                        <c:choose>
+                                            <c:when test="${activePack.user.userID eq loggedInUser.userID}">
+                                            <th>Delete</th>
+                                            </c:when>
+                                        </c:choose>
                                 </tr>
                                 <c:forEach var="card" items="${packCards}" varStatus="status">
                                     <tr>
@@ -88,34 +79,41 @@
                                                 <input type="text" name="cardAnswer" class="form-control flex-grow-1" value="<c:out value='${card.value.cardAnswer}' />">
                                             </form>
                                         </td>
-                                        <td class="text-center">
-                                            <form action="Card" method="post">
-                                                <input type="hidden" name="action" value="deleteCard">
-                                                <input type="hidden" name="cardID" value="${card.value.cardID}">
-                                                <input type="submit" value="Delete" class="btn btn-sm btn-danger">
-                                            </form>
-                                        </td>
-
+                                        <c:choose>
+                                            <c:when test="${activePack.user.userID eq loggedInUser.userID}">
+                                                <td class="text-center">
+                                                    <form action="Card" method="post">
+                                                        <input type="hidden" name="action" value="deleteCard">
+                                                        <input type="hidden" name="cardID" value="${card.value.cardID}">
+                                                        <input type="submit" value="Delete" class="btn btn-sm btn-danger">
+                                                    </form>
+                                                </td>
+                                            </c:when>
+                                        </c:choose>
                                     </tr>
                                 </c:forEach>
                             </table>
                         </c:if>
                     </div>
-                    <div class="col-6">
-                        <form action="Card" method="post">
-                            <h1>Add Card</h1>
-                            <input type="hidden" name="action" value="addCard">
-                            <div class="columnFlex">
-                                <label for="cardQuestion">Card Question</label>
-                                <input type="text" name="cardQuestion" class="form-control flex-grow-1" required><br>
+                    <c:choose>
+                        <c:when test="${activePack.user.userID eq loggedInUser.userID}">
+                            <div class="col-6">
+                                <form action="Card" method="post">
+                                    <h1>Add Card</h1>
+                                    <input type="hidden" name="action" value="addCard">
+                                    <div class="columnFlex">
+                                        <label for="cardQuestion">Card Question</label>
+                                        <input type="text" name="cardQuestion" class="form-control flex-grow-1" required><br>
+                                    </div>
+                                    <div class="columnFlex">
+                                        <label for="cardAnswer">Card Answer</label>
+                                        <input type="text" name="cardAnswer" class="form-control flex-grow-1" required><br>
+                                    </div>
+                                    <input type="submit" value="Submit" id="Submit">
+                                </form>
                             </div>
-                            <div class="columnFlex">
-                                <label for="cardAnswer">Card Answer</label>
-                                <input type="text" name="cardAnswer" class="form-control flex-grow-1" required><br>
-                            </div>
-                            <input type="submit" value="Submit" id="Submit">
-                        </form>
-                    </div>
+                        </c:when>
+                    </c:choose>
                 </div>
             </div>
         </div>

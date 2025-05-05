@@ -28,8 +28,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Study Session</title>
-        <link rel="stylesheet" href="styles/css-bootstrap/bootstrap.css">
         <link rel="stylesheet" href="styles/main.css">
+        <link rel="stylesheet" href="styles/css-bootstrap/bootstrap.css">
     </head>
     <body class="bg-primary">
         <div class="col">
@@ -39,8 +39,6 @@
             <div class="row justify-content-center">
                 <div class="col-6 text-center">
                     <h1 class="mb-4">Study Session</h1>
-                    <c:choose>
-                        <c:when test="${currentIndex gt packCards.size}">
                             <div class="card-container mt-4 mb-4">
                                 <div class="flip-card" id="flipCard">
                                     <div class="flip-card-inner">
@@ -76,8 +74,6 @@
                                     </form>
                                 </div>
                             </div>
-                        </c:when>
-                        <c:otherwise>
                             <div id="sessionComplete" class="d-none mt-4">
                                 <h3>Study Session Complete!</h3>
                                 <form action="StudySession" method="post">
@@ -85,8 +81,6 @@
                                     <input type="submit" value="View Results" id="submit" class="btn btn-primary">
                                 </form>
                             </div>
-                        </c:otherwise>
-                    </c:choose>
                 </div>
             </div>
         </div>

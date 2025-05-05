@@ -190,4 +190,57 @@ public class UserDA {
         return emailExists;
     }
 
+    public static User getUserFromEmail(String email) throws NamingException, SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        String query
+                = "SELECT * FROM user "
+                + "WHERE email = ? ";
+
+        ps = connection.prepareStatement(query);
+        ps.setString(1, email);
+        rs = ps.executeQuery();
+        
+        User user = new User();
+        if (rs.next()) {
+            user.setUserID(rs.getInt("userID"));
+            user.setUsername(rs.getString("username"));
+            user.setEmail(rs.getString("email"));
+            user.setPassword(rs.getString("password"));
+            user.setIsAdmin(rs.getBoolean("isAdmin"));
+            user.setReportStrikes(rs.getInt("reportStrikes"));
+            user.setActiveStatus(rs.getBoolean("activeStatus"));
+            user.setAdminMessage(rs.getString("adminMessage"));
+            user.setCreatedDate(rs.getDate("createdDate").toLocalDate());
+        }
+        
+        rs.close();
+        ps.close();
+        pool.freeConnection(connection);
+        return user;
+    }
+    
+    public static int changeReportStrike(User user) throws NamingException, SQLException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+
+        String query
+                = "UPDATE user "
+                + "SET reportStrikes = ? "
+                + "WHERE userID = ?";
+
+        ps = connection.prepareStatement(query);
+        ps.setInt(1, user.getReportStrikes());
+        ps.setInt(2, user.getUserID());
+
+        int rows = ps.executeUpdate();
+        ps.close();
+        pool.freeConnection(connection);
+        return rows;
+
+    }
 }

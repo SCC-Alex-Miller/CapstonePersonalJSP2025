@@ -18,22 +18,28 @@ public class Report implements Serializable {
     private String reportUserNotes;
     private String reportAdminNotes;
     private int reportCreatedByID;
+    private String reportCreatedUsername;
     private int reportedUserID;
+    private String reportedUsername;
     private int reportedPackID;
 
     public Report() {
     }
 
-    public Report(int reportID, String reportType, boolean reportActive, String reportUserNotes, String reportAdminNotes, int reportCreatedByID, int reportedUserID, int reportedPackID) {
+    public Report(int reportID, String reportType, boolean reportActive, String reportUserNotes, String reportAdminNotes, int reportCreatedByID, String reportCreatedUsername, int reportedUserID, String reportedUsername, int reportedPackID) {
         this.reportID = reportID;
         this.reportType = reportType;
         this.reportActive = reportActive;
         this.reportUserNotes = reportUserNotes;
         this.reportAdminNotes = reportAdminNotes;
         this.reportCreatedByID = reportCreatedByID;
+        this.reportCreatedUsername = reportCreatedUsername;
         this.reportedUserID = reportedUserID;
+        this.reportedUsername = reportedUsername;
         this.reportedPackID = reportedPackID;
     }
+
+    
 
     public int getReportID() {
         return reportID;
@@ -97,6 +103,22 @@ public class Report implements Serializable {
 
     public void setReportedPackID(int reportedPackID) {
         this.reportedPackID = reportedPackID;
+    }
+
+    public String getReportCreatedUsername() {
+        return reportCreatedUsername;
+    }
+
+    public void setReportCreatedUsername(String reportCreatedUsername) {
+        this.reportCreatedUsername = reportCreatedUsername;
+    }
+
+    public String getReportedUsername() {
+        return reportedUsername;
+    }
+
+    public void setReportedUsername(String reportedUsername) {
+        this.reportedUsername = reportedUsername;
     }
     
     

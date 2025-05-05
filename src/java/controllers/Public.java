@@ -81,7 +81,7 @@ public class Public extends HttpServlet {
                     if (storedCreds == null || !ch.matches(password, storedCreds.getPassword())) {
                         request.setAttribute("message", "invalid credentials");
                     } else {
-                        User loggedInUser = storedCreds;
+                        User loggedInUser = UserDA.getUserFromEmail(email);
                         session.setAttribute("loggedInUser", loggedInUser);
                         url = "/userPack.jsp";
                     }

@@ -4,14 +4,18 @@
  */
 package controllers;
 
+import business.Card;
+import business.Pack;
 import business.Report;
 import business.User;
+import data.CardDA;
 import data.ReportDA;
 import data.UserDA;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
@@ -46,6 +50,7 @@ public class ReportController extends HttpServlet {
         HashMap<String, String> errors = new HashMap();
 
         String message;
+        String error;
 
         switch (action) {
             case "goToReportPage" -> {
@@ -53,7 +58,7 @@ public class ReportController extends HttpServlet {
                 String reportedUsername = request.getParameter("reportedUsername");
                 int reportedUserID = Integer.parseInt(request.getParameter("reportedUserID"));
                 int reportedPackID = Integer.parseInt(request.getParameter("reportedPackID"));
-                
+
                 request.setAttribute("reportedUsername", reportedUsername);
                 request.setAttribute("reportedUserID", reportedUserID);
                 request.setAttribute("reportedPackID", reportedPackID);
@@ -61,33 +66,107 @@ public class ReportController extends HttpServlet {
                 url = "/reportPage.jsp";
                 break;
             }
-            
+
             case "addReport" -> {
                 request.setAttribute("loggedInUser", loggedInUser);
                 int reportedUserID = Integer.parseInt(request.getParameter("reportedUserID"));
                 int reportedPackID = Integer.parseInt(request.getParameter("reportedPackID"));
-                
+
                 String reportType = request.getParameter("reportType");
                 String reportUserNotes = request.getParameter("reportUserNotes");
                 int reportCreatedByID = loggedInUser.getUserID();
-                
+
                 Report report = new Report();
-                
+
                 report.setReportType(reportType);
                 report.setReportActive(true);
                 report.setReportUserNotes(reportUserNotes);
                 report.setReportCreatedByID(reportCreatedByID);
                 report.setReportedUserID(reportedUserID);
                 report.setReportedPackID(reportedPackID);
-                        
+
                 try {
                     ReportDA.addReport(report);
                 } catch (NamingException | SQLException e) {
                     LOG.log(Level.SEVERE, url, e);
                     message = "Unable to add report";
                 }
-                
-                url = "/reportPage.jsp";
+
+                url = "/publicPack.jsp";
+                break;
+            }
+
+            case "goToActiveReports" -> {
+                if (loggedInUser.getIsAdmin() == false) {
+                    response.sendRedirect("Pack");
+                    return;
+                }
+
+                url = "/activeReports.jsp";
+                break;
+            }
+
+            case "viewPack" -> {
+                int packID = Integer.parseInt(request.getParameter("packID"));
+                int reportedUserID = Integer.parseInt(request.getParameter("reportedUserID"));
+                String packName = request.getParameter("packName");
+
+                User reportedUser = new User();
+
+                reportedUser.setUserID(reportedUserID);
+
+                Pack activePack = new Pack();
+                activePack.setPackID(packID);
+                activePack.setPackName(packName);
+                activePack.setUser(reportedUser);
+
+                LinkedHashMap<Integer, Card> packCards = new LinkedHashMap();
+
+                try {
+                    packCards = CardDA.selectPackCards(activePack.getPackID());
+                    request.setAttribute("packCards", packCards);
+
+                } catch (NamingException | SQLException e) {
+                    error = "Issue populating cards for Pack.";
+                }
+
+                request.setAttribute("packCards", packCards);
+                request.getSession().setAttribute("activePack", activePack);
+                url = "/individualPack.jsp";
+                break;
+            }
+
+            case "editReport" -> {
+                int reportID = Integer.parseInt(request.getParameter("reportID"));
+                String adminNotes = request.getParameter("adminNotes");
+                String answer = request.getParameter("answer");
+
+                if (answer.equals("approve")) {
+                    try {
+                        ReportDA.editReport(reportID, adminNotes, false);
+                    } catch (NamingException | SQLException e) {
+                        error = "Unable to edit report";
+                    }
+
+                    int reportStrikes = loggedInUser.getReportStrikes();
+
+                    reportStrikes++;
+
+                    loggedInUser.setReportStrikes(reportStrikes);
+
+                    try {
+                        UserDA.changeReportStrike(loggedInUser);
+                    } catch (NamingException | SQLException e) {
+                        error = "Unable to change reportStrikes";
+                    }
+                } else if (answer.equals("reject")) {
+                    try {
+                        ReportDA.editReport(reportID, adminNotes, false);
+                    } catch (NamingException | SQLException e) {
+                        error = "Unable to edit report.";
+                    }
+                }
+                url = "/activeReports.jsp";
                 break;
             }
         }

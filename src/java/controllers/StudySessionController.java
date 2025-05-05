@@ -94,12 +94,14 @@ public class StudySessionController extends HttpServlet {
                     request.setAttribute("wrongCount", wrongCount);
                     request.setAttribute("packCards", packCards);
                 } else {
-                    // End session
-                    request.setAttribute("sessionComplete", true);
-                    request.setAttribute("currentIndex", currentIndex);
+                    
+                    int totalCards = rightCount + wrongCount;
+                    
+                    request.setAttribute("totalCards", totalCards);
                     request.setAttribute("rightCount", rightCount);
                     request.setAttribute("wrongCount", wrongCount);
-                    request.setAttribute("packCards", packCards);
+                    
+                    url= "/results.jsp";
 
                 }
 

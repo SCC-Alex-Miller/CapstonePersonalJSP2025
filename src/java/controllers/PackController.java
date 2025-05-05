@@ -51,6 +51,7 @@ public class PackController extends HttpServlet {
         LinkedHashMap<Integer, Pack> allUserPacks = new LinkedHashMap<>();
         HashMap<String, String> errors = new HashMap();
         String message;
+        String error;
 
         String url = "/userPack.jsp";
 
@@ -255,6 +256,17 @@ public class PackController extends HttpServlet {
                 activePack.setPackName(packName);
                 activePack.setUser(loggedInUser);
 
+                LinkedHashMap<Integer, Card> packCards = new LinkedHashMap();
+                
+                try {
+                    packCards = CardDA.selectPackCards(activePack.getPackID());
+                    request.setAttribute("packCards", packCards);
+
+                } catch (NamingException | SQLException e) {
+                    error = "Issue populating cards for Pack.";
+                }
+
+                request.setAttribute("packCards", packCards);
                 request.getSession().setAttribute("activePack", activePack);
                 url = "/individualPack.jsp";
                 break;
