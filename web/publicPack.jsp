@@ -90,10 +90,12 @@
                                                                 <input type="hidden" name="reportedPackID" value="${pack.value.packID}">
                                                                 <input type="submit" id="reportUser" class="dropdown-item" value="Report User">
                                                             </form>
-                                                            <form action="Admin" method="post" class="m-0 p-0">
-                                                                <input type="hidden" name="action" value="banUser">
-                                                                <input type="submit" id="banUser" class="dropdown-item" value="Ban User">
-                                                            </form>
+                                                            <c:if test="${loggedInUser.isAdmin == true}">
+                                                                <form action="Admin" method="post" class="m-0 p-0">
+                                                                    <input type="hidden" name="action" value="banUser">
+                                                                    <input type="submit" id="banUser" class="dropdown-item" value="Ban User">
+                                                                </form>
+                                                            </c:if>
                                                         </div>
                                                     </div>
                                                 </c:when>

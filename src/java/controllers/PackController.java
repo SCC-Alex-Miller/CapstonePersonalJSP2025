@@ -252,9 +252,13 @@ public class PackController extends HttpServlet {
                 String packName = request.getParameter("packName");
 
                 Pack activePack = new Pack();
-                activePack.setPackID(packID);
-                activePack.setPackName(packName);
-                activePack.setUser(loggedInUser);
+                
+                try {
+                    activePack = PackDA.selectPack(packID);
+                } catch (NamingException | SQLException e) {
+                    error = "Issue getting Pack.";
+                }
+                
 
                 LinkedHashMap<Integer, Card> packCards = new LinkedHashMap();
                 

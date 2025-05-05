@@ -75,8 +75,8 @@
                                         <td>
                                             <form action="Card" method="post">
                                                 <input type="hidden" name="cardID" value="<c:out value='${card.key}' />">
-                                                <input type="text" name="cardQuestion" class="form-control flex-grow-1" value="<c:out value='${card.value.cardQuestion}' />">
-                                                <input type="text" name="cardAnswer" class="form-control flex-grow-1" value="<c:out value='${card.value.cardAnswer}' />">
+                                                <input readonly type="text" name="cardQuestion" class="form-control flex-grow-1" value="<c:out value='${card.value.cardQuestion}' />">
+                                                <input readonly type="text" name="cardAnswer" class="form-control flex-grow-1" value="<c:out value='${card.value.cardAnswer}' />">
                                             </form>
                                         </td>
                                         <c:choose>

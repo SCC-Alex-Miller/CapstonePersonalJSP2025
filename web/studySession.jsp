@@ -6,7 +6,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<%   
+<%
     User loggedInUser = (User) session.getAttribute("loggedInUser");
     if (loggedInUser == null) {
         response.sendRedirect("Public");
@@ -39,48 +39,50 @@
             <div class="row justify-content-center">
                 <div class="col-6 text-center">
                     <h1 class="mb-4">Study Session</h1>
-                            <div class="card-container mt-4 mb-4">
-                                <div class="flip-card" id="flipCard">
-                                    <div class="flip-card-inner">
-                                        <div class="flip-card-front d-flex align-items-center justify-content-center text-center" id="cardFront">
-                                            <div id="cardFrontContent"></div>
-                                        </div>
-                                        <div class="flip-card-back d-flex align-items-center justify-content-center text-center" id="cardBack">
-                                            <div id="cardBackContent"></div>
-                                        </div>
-                                    </div>
+                    <div class="card-container mt-4 mb-4">
+                        <div class="flip-card" id="flipCard">
+                            <div class="flip-card-inner">
+                                <div class="flip-card-front d-flex align-items-center justify-content-center text-center" id="cardFront">
+                                    <div id="cardFrontContent"></div>
+                                </div>
+                                <div class="flip-card-back d-flex align-items-center justify-content-center text-center" id="cardBack">
+                                    <div id="cardBackContent"></div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
 
-                            <div id="cardControls">
-                                <div id="answerButtons" class="d-none">
-                                    <form action="StudySession" method="post">
-                                        <input type="hidden" name="action" value="Answer">
-                                        <input type="hidden" name="answer" value="right">
-                                        <input type="hidden" name="rightCount" value="${rightCount}">
-                                        <input type="hidden" name="wrongCount" value="${wrongCount}">
-                                        <input type="hidden" name="currentIndex" value="${currentIndex}">
-                                        <input type="hidden" name="packCards" value="${packCards}">
-                                        <input type="submit" value="Right" class="btn btn-success" id="rightButton">
-                                    </form>
-                                    <form action="StudySession" method="post">
-                                        <input type="hidden" name="action" value="Answer">
-                                        <input type="hidden" name="answer" value="wrong">
-                                        <input type="hidden" name="rightCount" value="${rightCount}">
-                                        <input type="hidden" name="wrongCount" value="${wrongCount}">
-                                        <input type="hidden" name="currentIndex" value="${currentIndex}">
-                                        <input type="hidden" name="packCards" value="${activePack.packID}">
-                                        <input type="submit" value="Wrong" class="btn btn-danger" id="wrongButton">
-                                    </form>
-                                </div>
-                            </div>
-                            <div id="sessionComplete" class="d-none mt-4">
-                                <h3>Study Session Complete!</h3>
+                    <div id="cardControls">
+                        <div id="answerButtons" class="d-none">
+                            <div class="d-flex gap-2 justify-content-center">
                                 <form action="StudySession" method="post">
-                                    <input type="hidden" name="action" value="goToResultsPage">
-                                    <input type="submit" value="View Results" id="submit" class="btn btn-primary">
+                                    <input type="hidden" name="action" value="Answer">
+                                    <input type="hidden" name="answer" value="right">
+                                    <input type="hidden" name="rightCount" value="${rightCount}">
+                                    <input type="hidden" name="wrongCount" value="${wrongCount}">
+                                    <input type="hidden" name="currentIndex" value="${currentIndex}">
+                                    <input type="hidden" name="packCards" value="${packCards}">
+                                    <input type="submit" value="Right" class="btn btn-success" id="rightButton">
+                                </form>
+                                <form action="StudySession" method="post">
+                                    <input type="hidden" name="action" value="Answer">
+                                    <input type="hidden" name="answer" value="wrong">
+                                    <input type="hidden" name="rightCount" value="${rightCount}">
+                                    <input type="hidden" name="wrongCount" value="${wrongCount}">
+                                    <input type="hidden" name="currentIndex" value="${currentIndex}">
+                                    <input type="hidden" name="packCards" value="${activePack.packID}">
+                                    <input type="submit" value="Wrong" class="btn btn-danger" id="wrongButton">
                                 </form>
                             </div>
+                        </div>
+                    </div>
+                    <div id="sessionComplete" class="d-none mt-4">
+                        <h3>Study Session Complete!</h3>
+                        <form action="StudySession" method="post">
+                            <input type="hidden" name="action" value="goToResultsPage">
+                            <input type="submit" value="View Results" id="submit" class="btn btn-primary">
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

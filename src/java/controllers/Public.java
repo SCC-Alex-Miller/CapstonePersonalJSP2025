@@ -108,14 +108,14 @@ public class Public extends HttpServlet {
                 
                 if (user.getUsername() == null || user.getUsername().equals("")) {
                     message = "Must enter a username.";
-                    errors.put("username", "username empty");
+                    errors.put("username", "Username Empty");
                 }
                 
                 user.setEmail(email);
                 
                 if (user.getEmail() == null || user.getEmail().equals("")) {
                     message = "Must enter an email.";
-                    errors.put("email", "E-mail empty");
+                    errors.put("emailEmpty", "E-mail empty");
                 }
                 
                 boolean emailExists = false;
@@ -128,12 +128,12 @@ public class Public extends HttpServlet {
                 
                 if (emailExists) {
                     message = "Email already exists.";
-                    errors.put("email", "E-mail exists");
+                    errors.put("emailExist", "E-mail exists");
                 }
                 
                 if (password == null || password.equals("")) {
                     message = "Must enter a password.";
-                    errors.put("email", "Password empty");
+                    errors.put("email", "Password Empty");
                 }
 
                 
